@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import melaLogo from '../../../assets/mela_logo.png';
 import { Check, ArrowRight, Volume2, Globe } from 'lucide-react';
 import { speakText, playSoundEffect } from '../../../services/voiceAssistant';
 
@@ -81,7 +82,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
           {/* Title Overlay with Traditional Rural Aesthetic */}
           <div className="absolute bottom-2 left-0 right-0 px-4 flex flex-col items-center text-center">
             <div className="w-14 h-14 rounded-2xl overflow-hidden shadow-lg border-2 border-white/80 bg-[#FAF6ED] mb-1.5 flex items-center justify-center">
-              <img src="/mela_logo.png" alt="mela logo" className="w-full h-full object-cover" />
+              <img src={melaLogo} alt="mela logo" className="w-full h-full object-cover" />
             </div>
             <h1 className="text-xl font-black text-[#1E3A1E] tracking-tight drop-shadow-sm font-sans leading-tight">
               mela • हुनर से बाज़ार तक

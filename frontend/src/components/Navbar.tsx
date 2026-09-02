@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useMarketplace } from '../context/MarketplaceContext';
 import { LANGUAGES } from '../data/translations';
+import melaLogo from '../assets/mela_logo.png';
 import { 
   Sparkles, 
   ShoppingBag, 
@@ -70,7 +71,7 @@ export const Navbar: React.FC<NavbarProps> = ({ searchQuery, setSearchQuery }) =
           >
             <div className="w-12 h-12 rounded-2xl overflow-hidden shadow-md shadow-amber-950/20 border-2 border-amber-600/30 group-hover:scale-105 transition-transform duration-200 bg-[#FAF6ED] flex items-center justify-center flex-shrink-0">
               <img 
-                src="/mela_logo.png" 
+                src={melaLogo} 
                 alt="mela logo" 
                 className="w-full h-full object-cover"
               />

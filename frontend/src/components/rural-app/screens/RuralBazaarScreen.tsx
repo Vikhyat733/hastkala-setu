@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import melaLogo from '../../../assets/mela_logo.png';
 import { Search, Heart, Volume2, Sparkles, Filter } from 'lucide-react';
 import { RURAL_CATEGORIES } from '../data/ruralAppDefaults';
 import { RuralAppProductItem } from '../../../types';
@@ -48,7 +49,7 @@ export const RuralBazaarScreen: React.FC<RuralBazaarScreenProps> = ({
         <div className="flex items-center justify-between pt-1">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-xl overflow-hidden bg-white border border-[#E5DAC8] shadow-xs flex items-center justify-center flex-shrink-0">
-              <img src="/mela_logo.png" alt="mela logo" className="w-full h-full object-cover" />
+              <img src={melaLogo} alt="mela logo" className="w-full h-full object-cover" />
             </div>
             <h1 className="text-xl sm:text-2xl font-black text-[#1E3A1E] font-sans leading-none">
               कारीगर बाज़ार

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import melaLogo from '../../assets/mela_logo.png';
 import { 
   Wifi, 
   Battery, 
@@ -53,7 +54,7 @@ export const RuralAppFrame: React.FC<RuralAppFrameProps> = ({
         {/* Left: App Title & Badge */}
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl overflow-hidden bg-[#FAF6ED] border border-amber-600/30 shadow flex items-center justify-center flex-shrink-0">
-            <img src="/mela_logo.png" alt="mela" className="w-full h-full object-cover" />
+            <img src={melaLogo} alt="mela" className="w-full h-full object-cover" />
           </div>
           <div>
             <div className="flex items-center gap-2">

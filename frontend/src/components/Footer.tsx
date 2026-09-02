@@ -1,5 +1,6 @@
 import React from 'react';
 import { useMarketplace } from '../context/MarketplaceContext';
+import melaLogo from '../assets/mela_logo.png';
 import { ShieldCheck, Heart, Sparkles, Award, Globe } from 'lucide-react';
 
 export const Footer: React.FC = () => {
@@ -57,7 +58,7 @@ export const Footer: React.FC = () => {
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl overflow-hidden bg-[#FAF6ED] border border-amber-400/40 shadow flex items-center justify-center">
                 <img 
-                  src="/mela_logo.png" 
+                  src={melaLogo} 
                   alt="mela" 
                   className="w-full h-full object-cover" 
                 />
