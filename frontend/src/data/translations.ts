@@ -13,8 +13,8 @@ export const LANGUAGES: { code: SupportedLanguage; label: string; native: string
 
 export const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
   en: {
-    appTitle: 'HastKala Setu',
-    appSubtitle: 'AI-Powered Local Artisan Marketplace',
+    appTitle: 'mela',
+    appSubtitle: 'AI-Powered Rural Artisan & Handicraft Marketplace',
     tagline: 'Bridging Ancient Heritage with Modern AI',
     searchPlaceholder: 'Search authentic handicrafts, pottery, GI crafts, master artisans...',
     allCategories: 'All Crafts',
@@ -81,8 +81,8 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> 
     giHeritageCrafts: '350+ GI Crafts Cataloged'
   },
   hi: {
-    appTitle: 'हस्तकलाशेतू',
-    appSubtitle: 'एआई-संचालित स्थानीय कारीगर बाज़ार',
+    appTitle: 'मेला (mela)',
+    appSubtitle: 'एआई-संचालित ग्रामीण कारीगर एवं हस्तशिल्प बाज़ार',
     tagline: 'प्राचीन विरासत को आधुनिक एआई से जोड़ना',
     searchPlaceholder: 'प्रामाणिक हस्तशिल्प, मिट्टी के बर्तन, जीआई शिल्प, उस्ताद कारीगर खोजें...',
     allCategories: 'सभी शिल्प',
@@ -149,8 +149,8 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> 
     giHeritageCrafts: '350+ जीआई शिल्प सूचीबद्ध'
   },
   bn: {
-    appTitle: 'হস্তকলা সেতু',
-    appSubtitle: 'এআই-চালিত স্থানীয় কারিগর বাজার',
+    appTitle: 'মেলা (mela)',
+    appSubtitle: 'এআই-চালিত গ্রামীণ কারিগর ও হস্তশিল্প বাজার',
     tagline: 'ঐতিহ্য ও আধুনিক এআই প্রযুক্তির মেলবন্ধন',
     searchPlaceholder: 'খাঁটি হস্তশিল্প, মৃৎশিল্প, জিআই ক্রাফট খুঁজুন...',
     allCategories: 'সকল শিল্প',
@@ -217,8 +217,8 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> 
     giHeritageCrafts: '৩৫০+ জিআই পণ্য'
   },
   ta: {
-    appTitle: 'ஹஸ்த்கலா சேது',
-    appSubtitle: 'ஏஐ இயங்கும் கைவினைஞர் சந்தை',
+    appTitle: 'மேளா (mela)',
+    appSubtitle: 'AI கிராமப்புற கைவினைஞர் மற்றும் கைவினைப் பொருட்கள் சந்தை',
     tagline: 'பழங்கால கைவினை மற்றும் நவீன ஏஐ இணைப்பு',
     searchPlaceholder: 'பாரம்பரிய கைவினைப் பொருட்கள், மண்பாண்டங்கள் தேடுங்கள்...',
     allCategories: 'அனைத்து பிரிவுகள்',
@@ -285,8 +285,8 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> 
     giHeritageCrafts: '350+ GI கைவினைப்பொருட்கள்'
   },
   te: {
-    appTitle: 'హస్తకళా సేతు',
-    appSubtitle: 'ఏఐ ఆధారిత స్థానిక హస్తకళల మార్కెట్',
+    appTitle: 'మేళా (mela)',
+    appSubtitle: 'ఏఐ ఆధారిత గ్రామీణ చేతివృత్తుల బజార్',
     tagline: 'ప్రాచీన వారసత్వానికి ఆధునిక ఏఐ సాంకేతికత',
     searchPlaceholder: 'ప్రామాణిక హస్తకళలు, మట్టి పాత్రలు, చేనేత వస్త్రాలు శోధించండి...',
     allCategories: 'అన్ని వర్గాలు',
@@ -353,8 +353,8 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> 
     giHeritageCrafts: '350+ GI ఉత్పత్తులు'
   },
   mr: {
-    appTitle: 'हस्तकलाशेतू',
-    appSubtitle: 'स्थानिक कारागिरांसाठी एआय समर्थित बाजारपेठ',
+    appTitle: 'मेळा (mela)',
+    appSubtitle: 'स्थानिक कारागिरांसाठी एआय समर्थित ग्रामीण हस्तकला बाजारपेठ',
     tagline: 'प्राचीन वारसा आणि आधुनिक एआयचा संगम',
     searchPlaceholder: 'अस्सल हस्तकला, मातीची भांडी, जीआय उत्पादने शोधा...',
     allCategories: 'सर्व हस्तकला',
@@ -421,8 +421,8 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> 
     giHeritageCrafts: '३५०+ जीआय उत्पादने'
   },
   gu: {
-    appTitle: 'હસ્તકલા સેતુ',
-    appSubtitle: 'સ્થાનિક કારીગરો માટે એઆઈ બજાર',
+    appTitle: 'મેળો (mela)',
+    appSubtitle: 'સ્થાનિક કારીગરો માટે એઆઈ ગ્રામીણ બજાર',
     tagline: 'પ્રાચીન વિરાસત અને આધુનિક એઆઈનો સમન્વય',
     searchPlaceholder: 'અસલી હસ્તકલા, માટીના વાસણો, જીઆઈ પ્રોડક્ટ્સ શોધો...',
     allCategories: 'બધી શ્રેણીઓ',
@@ -489,8 +489,8 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> 
     giHeritageCrafts: '350+ GI કળા'
   },
   kn: {
-    appTitle: 'ಹಸ್ತಕಲಾ ಸೇತು',
-    appSubtitle: 'ಎಐ ಆಧಾರಿತ ಸ್ಥಳೀಯ ಕುಶಲಕರ್ಮಿ ಮಾರುಕಟ್ಟೆ',
+    appTitle: 'ಮೇಳ (mela)',
+    appSubtitle: 'ಎಐ ಆಧಾರಿತ ಸ್ಥಳೀಯ ಗ್ರಾಮೀಣ ಕುಶಲಕರ್ಮಿ ಮಾರುಕಟ್ಟೆ',
     tagline: 'ಪ್ರಾಚೀನ ಪರಂಪರೆ ಮತ್ತು ಆಧುನಿಕ ಎಐ ತಂತ್ರಜ್ಞಾನದ ಸಂಗಮ',
     searchPlaceholder: 'ಅಪ್ಪಟ ಕರಕುಶಲ ವಸ್ತುಗಳು, ಮಣ್ಣಿನ ಪಾತ್ರೆಗಳು, ಜಿಐ ಕಲೆಗಳನ್ನು ಹುಡುಕಿ...',
     allCategories: 'ಎಲ್ಲಾ ಕರಕುಶಲ ವಸ್ತುಗಳು',

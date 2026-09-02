@@ -54,14 +54,20 @@ export const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           
           <div className="space-y-3">
-            <div className="flex items-center gap-2">
-              <span className="text-2xl">🏺</span>
-              <span className="font-serif font-black text-xl text-white">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl overflow-hidden bg-[#FAF6ED] border border-amber-400/40 shadow flex items-center justify-center">
+                <img 
+                  src="/mela_logo.png" 
+                  alt="mela" 
+                  className="w-full h-full object-cover" 
+                />
+              </div>
+              <span className="font-serif font-black text-2xl text-white tracking-wide capitalize">
                 {t('appTitle')}
               </span>
             </div>
             <p className="text-xs text-slate-300 leading-relaxed">
-              Smart India Hackathon Initiative empowering 12,400+ traditional Indian artisans through Multimodal AI Vision, Geographical Indication protection, and fair digital commerce.
+              Smart India Hackathon Mela initiative empowering 12,400+ traditional Indian artisans through Multimodal AI Vision, Geographical Indication protection, and direct fair-trade commerce.
             </p>
           </div>
 
@@ -130,7 +136,7 @@ export const Footer: React.FC = () => {
 
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 gap-4">
-          <p>© 2026 HastKala Setu | Smart India Hackathon (SIH Mela Edition). Made with ❤️ for Indian Artisans.</p>
+          <p>© 2026 mela | Smart India Hackathon. Made with ❤️ for Indian Artisans.</p>
           <div className="flex items-center gap-4">
             <span>GI Registry Recognized</span>
             <span>•</span>

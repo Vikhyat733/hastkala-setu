@@ -85,11 +85,11 @@ export const MarketplaceProvider: React.FC<{ children: React.ReactNode }> = ({ c
 
   const [activeLanguage, setActiveLanguageState] = useState<SupportedLanguage>(() => {
     const saved = localStorage.getItem(LOCAL_STORAGE_LANG) as SupportedLanguage;
-    return saved || 'en';
+    return saved || 'hi';
   });
 
   const [activeCurrency, setActiveCurrency] = useState<'INR' | 'USD' | 'EUR'>('INR');
-  const [currentView, setCurrentView] = useState<ViewMode>('marketplace');
+  const [currentView, setCurrentView] = useState<ViewMode>('rural-artisan-app');
   const [selectedProductForModal, setSelectedProductForModal] = useState<Product | null>(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);

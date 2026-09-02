@@ -25,7 +25,7 @@ app.use(express.urlencoded({ extended: true, limit: '20mb' }));
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'healthy',
-    service: 'HastKala Setu Backend API',
+    service: 'mela Backend API',
     version: '1.0.0',
     geminiConfigured: !!process.env.GEMINI_API_KEY,
     timestamp: new Date().toISOString()
@@ -45,6 +45,6 @@ app.use((req, res) => {
 
 // Start Server
 app.listen(PORT, () => {
-  console.log(`🪔 HastKala Setu Backend Server listening on http://localhost:${PORT}`);
+  console.log(`🎪 mela Backend Server listening on http://localhost:${PORT}`);
   console.log(`✨ AI Vision & Pricing APIs ready at http://localhost:${PORT}/api/ai`);
 });

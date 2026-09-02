@@ -42,17 +42,28 @@ export const HeroBanner: React.FC = () => {
           </p>
 
           {/* CTAs */}
-          <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
+          <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-2">
+            <button
+              onClick={() => {
+                setCurrentView('rural-artisan-app');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              className="group relative inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-[#2C5E43] to-[#3A6B35] text-white font-black text-sm sm:text-base shadow-xl shadow-emerald-950/40 border-2 border-[#8AC172] hover:scale-105 hover:shadow-2xl transition-all duration-200"
+            >
+              <span className="text-xl">🌾</span>
+              <span>ग्रामीण कारीगर ऐप खोलें (Mobile App)</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </button>
+
             <button
               onClick={() => {
                 setCurrentView('ai-studio');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
-              className="group relative inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-artisan-terracotta to-artisan-saffron-gold text-white font-bold text-sm sm:text-base shadow-xl shadow-artisan-terracotta/40 hover:scale-105 hover:shadow-2xl transition-all duration-200"
+              className="group relative inline-flex items-center gap-2.5 px-5 py-3.5 rounded-2xl bg-gradient-to-r from-artisan-terracotta to-artisan-saffron-gold text-white font-bold text-sm sm:text-base shadow-xl shadow-artisan-terracotta/40 hover:scale-105 transition-all duration-200"
             >
               <Sparkles className="w-5 h-5 text-amber-200" />
-              <span>Try Artisan AI Vision Studio</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              <span>AI Vision Studio</span>
             </button>
 
             <button
@@ -60,7 +71,7 @@ export const HeroBanner: React.FC = () => {
                 const el = document.getElementById('marketplace-products');
                 el?.scrollIntoView({ behavior: 'smooth' });
               }}
-              className="inline-flex items-center gap-2 px-5 py-3.5 rounded-2xl bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-semibold text-sm sm:text-base border border-white/20 transition-all"
+              className="inline-flex items-center gap-2 px-4 py-3.5 rounded-2xl bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-semibold text-sm border border-white/20 transition-all"
             >
               <Flame className="w-4 h-4 text-amber-400" />
               <span>Explore Crafts</span>

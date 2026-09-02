@@ -135,7 +135,7 @@ export function generateSmartFallbackAnalysis(imageName: string = '', detectedCa
       },
       careInstructions: 'Keep away from direct moisture and harsh ultraviolet sunlight. Frame with acid-free mount and anti-glare glass.',
       socialBlurbWhatsApp: '🎨 Check out this authentic hand-painted Madhubani Sun Canvas handcrafted with botanical dyes on handmade paper. 100% fair-wage support for rural women artisans! 🪔 Direct artisan link:',
-      socialBlurbInstagram: 'Centuries of Mithila storytelling captured in natural turmeric & soot pigments ✨ Handcrafted Madhubani Canvas by verified village artisans. #MadhubaniPainting #MithilaArt #GIHandicrafts #WomenArtisans #HastKalaSetu',
+      socialBlurbInstagram: 'Centuries of Mithila storytelling captured in natural turmeric & soot pigments ✨ Handcrafted Madhubani Canvas by verified village artisans on mela. #MadhubaniPainting #MithilaArt #GIHandicrafts #WomenArtisans #Mela',
       confidenceScore: 0.96,
       detectedVisualFeatures: ['Kachni Hatching Lines', 'Sun God Motif', 'Fish & Lotus Borders', 'Natural Earth Tones', 'Handmade Paper Texture']
     };
@@ -339,7 +339,7 @@ export function generateSmartFallbackAnalysis(imageName: string = '', detectedCa
     },
     careInstructions: 'Before first use, soak completely in fresh water for 24 hours. Wash gently without chemical soaps.',
     socialBlurbWhatsApp: '🪔 Switch to ancient wellness! 100% Natural Handcrafted Terracotta Water Pitcher by local potters. Cools water naturally without electricity. Order here:',
-    socialBlurbInstagram: 'Earthy perfection straight from the potter’s wheel 🏺 Organic terracotta pitcher that breathes life into water. #TerracottaPottery #IndianArtisans #SustainableLiving #EcoFriendlyKitchen #HastKala',
+    socialBlurbInstagram: 'Earthy perfection straight from the potter’s wheel 🏺 Organic terracotta pitcher that breathes life into water. #TerracottaPottery #IndianArtisans #SustainableLiving #EcoFriendlyKitchen #Mela',
     confidenceScore: 0.93,
     detectedVisualFeatures: ['Porous Terracotta Clay Body', 'Wheel-Thrown Ribbed Lines', 'Natural Ochre Slip Burnish', 'Hand-Etched Neck Motifs']
   };

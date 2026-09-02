@@ -1,5 +1,5 @@
-# HastKala Setu | हस्तकलाशेतू (SIH Mela Edition)
-> **AI-Powered E-Commerce Marketplace & Gemini Vision Onboarding Studio for Local Artisans**
+# mela | मेला (SIH Edition)
+> **AI-Powered E-Commerce Marketplace & Gemini Vision Onboarding Studio for Rural Artisans**
 
 ---
 

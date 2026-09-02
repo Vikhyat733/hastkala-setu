@@ -68,7 +68,7 @@ Respond ONLY with valid JSON. Do not include markdown code block backticks.`;
       return generateServerFallbackAnalysis(craftHint || '');
     }
 
-    const data = await response.json();
+    const data = (await response.json()) as any;
     const candidateText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
     if (!candidateText) {
       return generateServerFallbackAnalysis(craftHint || '');
@@ -131,8 +131,8 @@ function generateServerFallbackAnalysis(craftHint: string): AIVisionResult {
       hi: 'टिकाऊ, प्लास्टिक-मुक्त प्राकृतिक सामग्रियों के माध्यम से सदियों पुरानी जीवित लोक परंपराओं का संरक्षण।'
     },
     careInstructions: 'Clean gently with a soft dry cloth. Keep away from harsh chemicals and direct moisture.',
-    socialBlurbWhatsApp: '✨ Support rural master artisans! Check out this authentic GI-certified handicraft on HastKala Setu. 100% fair-trade proceeds go directly to artisan families.',
-    socialBlurbInstagram: 'Preserving living Indian cultural heritage ✨ 100% Handcrafted with traditional GI techniques. #HastKala #VocalForLocal #ArtisanDirect #HandmadeInIndia',
+    socialBlurbWhatsApp: '✨ Support rural master artisans! Check out this authentic GI-certified handicraft on mela. 100% fair-trade proceeds go directly to artisan families.',
+    socialBlurbInstagram: 'Preserving living Indian cultural heritage ✨ 100% Handcrafted with traditional GI techniques on mela. #Mela #VocalForLocal #ArtisanDirect #HandmadeInIndia',
     confidenceScore: 0.95,
     detectedVisualFeatures: ['Natural Pigment Tones', 'Handmade Symmetry', 'GI Craft Heritage Motif']
   };

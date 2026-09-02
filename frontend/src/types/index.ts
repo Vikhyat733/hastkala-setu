@@ -141,4 +141,32 @@ export interface AIVisionResult {
   rawGeminiResponse?: string;
 }
 
-export type ViewMode = 'marketplace' | 'ai-studio' | 'artisan-dashboard' | 'artisan-stories' | 'my-orders';
+export type ViewMode = 'marketplace' | 'ai-studio' | 'artisan-dashboard' | 'artisan-stories' | 'my-orders' | 'rural-artisan-app';
+
+export type RuralAppScreen = 
+  | 'welcome'           // Screen 1: Language & Welcome
+  | 'home'              // Screen 2: Main Home "आज क्या बेचना चाहेंगे?"
+  | 'add-choice'        // Screen 3: "नया सामान जोड़ें" (Photo/Gallery/Voice)
+  | 'camera'            // Screen 4: "फोटो लें" Viewfinder
+  | 'ai-processing'     // Screen 5: "AI काम कर रहा है..."
+  | 'ai-result'         // Screen 6: "AI ने तैयार किया"
+  | 'edit-details'      // Screen 7: "जाँचें और बदलें"
+  | 'publish-confirm'   // Screen 8: "सामान प्रकाशित करें" (Namaste Mascot)
+  | 'publish-success'   // Screen 9: "बधाई हो!" Confetti & Live
+  | 'my-items'          // Screen 10: "मेरे सामान"
+  | 'bazaar'            // Screen 11: "बाज़ार"
+  | 'account';          // Screen 12: "मेरा खाता"
+
+export interface RuralAppProductItem {
+  id: string;
+  name: string;
+  category: string;
+  price: number;
+  estimatedPriceRange?: string;
+  description: string;
+  image: string;
+  status: 'published' | 'sold' | 'order_received';
+  dateAdded: string;
+  viewsCount?: number;
+  ordersCount?: number;
+}

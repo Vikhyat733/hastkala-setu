@@ -68,19 +68,23 @@ export const Navbar: React.FC<NavbarProps> = ({ searchQuery, setSearchQuery }) =
             onClick={() => handleNav('marketplace')}
             className="flex items-center gap-3 cursor-pointer group flex-shrink-0"
           >
-            <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-artisan-terracotta to-artisan-saffron-gold flex items-center justify-center text-white shadow-md shadow-artisan-terracotta/25 group-hover:scale-105 transition-transform duration-200">
-              <span className="text-2xl">🏺</span>
+            <div className="w-12 h-12 rounded-2xl overflow-hidden shadow-md shadow-amber-950/20 border-2 border-amber-600/30 group-hover:scale-105 transition-transform duration-200 bg-[#FAF6ED] flex items-center justify-center flex-shrink-0">
+              <img 
+                src="/mela_logo.png" 
+                alt="mela logo" 
+                className="w-full h-full object-cover"
+              />
             </div>
             <div>
-              <div className="flex items-center gap-1.5">
-                <span className="text-xl sm:text-2xl font-serif font-black tracking-tight bg-gradient-to-r from-artisan-indigo via-artisan-terracotta to-artisan-indigo bg-clip-text text-transparent">
+              <div className="flex items-center gap-2">
+                <span className="text-2xl sm:text-3xl font-serif font-black tracking-tight bg-gradient-to-r from-[#3D2314] via-[#B84A1C] to-[#2C5E43] bg-clip-text text-transparent capitalize leading-none">
                   {t('appTitle')}
                 </span>
-                <span className="text-[10px] uppercase px-1.5 py-0.5 rounded-md bg-artisan-terracotta/10 text-artisan-terracotta font-bold tracking-wider hidden sm:inline-block">
+                <span className="text-[10px] uppercase px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-800 border border-amber-500/20 font-extrabold tracking-wider hidden sm:inline-block">
                   AI Mela
                 </span>
               </div>
-              <p className="text-[11px] text-artisan-slate/70 font-medium tracking-wide hidden md:block">
+              <p className="text-[11px] text-artisan-slate/70 font-semibold tracking-wide hidden md:block mt-0.5">
                 {t('appSubtitle')}
               </p>
             </div>
@@ -120,6 +124,22 @@ export const Navbar: React.FC<NavbarProps> = ({ searchQuery, setSearchQuery }) =
             >
               <Compass className="w-4 h-4" />
               <span>{t('marketplaceNav')}</span>
+            </button>
+
+            {/* Dedicated Rural Artisan Mobile App Mode */}
+            <button
+              onClick={() => handleNav('rural-artisan-app')}
+              className={`relative flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-extrabold transition-all ${
+                currentView === 'rural-artisan-app'
+                  ? 'bg-[#3A6B35] text-white shadow-md shadow-[#3A6B35]/30 ring-2 ring-[#8AC172]'
+                  : 'bg-[#E8F0E3] text-[#2C5528] border-2 border-[#A5CD84] hover:bg-[#D5EAD0] hover:scale-102 shadow-sm'
+              }`}
+            >
+              <span className="text-base">🌾</span>
+              <span>कारीगर ऐप (Mobile App)</span>
+              <span className="bg-[#E67E22] text-white text-[9px] font-black px-1.5 py-0.2 rounded-full uppercase tracking-tighter shadow-sm animate-pulse">
+                New
+              </span>
             </button>
 
             {/* AI Vision Studio Primary Action Button */}
@@ -282,6 +302,18 @@ export const Navbar: React.FC<NavbarProps> = ({ searchQuery, setSearchQuery }) =
         {/* Mobile Drawer Menu */}
         {mobileMenuOpen && (
           <div className="md:hidden border-t border-artisan-terracotta/10 py-3 space-y-2 animate-in fade-in slide-in-from-top duration-200">
+            <button
+              onClick={() => handleNav('rural-artisan-app')}
+              className="w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-extrabold bg-[#E8F0E3] text-[#2C5528] border border-[#A5CD84]"
+            >
+              <div className="flex items-center gap-3">
+                <span className="text-base">🌾</span>
+                <span>कारीगर ऐप (Rural Mobile App)</span>
+              </div>
+              <span className="text-[10px] bg-[#3A6B35] text-white px-2 py-0.5 rounded-full font-black">
+                App View
+              </span>
+            </button>
             <button
               onClick={() => handleNav('marketplace')}
               className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-left text-artisan-indigo hover:bg-artisan-sand"
