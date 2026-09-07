@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Product, CartItem, Order, SupportedLanguage, ViewMode, ArtisanProfile, AIVisionResult } from '../types';
+import { Product, CartItem, Order, SupportedLanguage, ViewMode, ArtisanProfile, AIVisionResult, B2BInquiry } from '../types';
 import { SAMPLE_CRAFTS } from '../data/sampleCrafts';
 import { UI_TRANSLATIONS } from '../data/translations';
 import confetti from 'canvas-confetti';
@@ -17,6 +17,7 @@ interface MarketplaceContextType {
   artisanTip: number;
   recentOrders: Order[];
   activeArtisan: ArtisanProfile;
+  b2bInquiries: B2BInquiry[];
   toastMessage: { text: string; type: 'success' | 'info' | 'warning' } | null;
   
   // Actions
@@ -37,6 +38,7 @@ interface MarketplaceContextType {
   
   publishNewCraft: (aiResult: AIVisionResult, image: string, customEdits?: Partial<Product>) => Product;
   createOrder: (orderData: Omit<Order, 'id' | 'orderDate' | 'trackingNumber' | 'estimatedDelivery'>) => Order;
+  submitB2BInquiry: (inquiryData: Omit<B2BInquiry, 'id' | 'status' | 'createdAt'>) => B2BInquiry;
   
   t: (key: string) => string;
   formatPrice: (amountInInr: number) => string;
@@ -51,6 +53,46 @@ const LOCAL_STORAGE_CART = 'hastkala_cart_v1';
 const LOCAL_STORAGE_WISHLIST = 'hastkala_wishlist_v1';
 const LOCAL_STORAGE_LANG = 'hastkala_lang_v1';
 const LOCAL_STORAGE_ORDERS = 'hastkala_orders_v1';
+const LOCAL_STORAGE_B2B = 'hastkala_b2b_v1';
+
+const INITIAL_B2B_INQUIRIES: B2BInquiry[] = [
+  {
+    id: 'b2b-1',
+    productId: 'craft-1',
+    productTitle: 'Hand-Painted Jaipur Blue Pottery Floral Vase',
+    craftCategory: 'pottery',
+    artisanId: 'artisan-1',
+    artisanName: 'Ramnarayan Kumhar',
+    quantity: 120,
+    targetDeliveryDate: '2026-04-15',
+    buyerName: 'Aarav Singhania',
+    buyerOrganization: 'Heritage Haveli Boutique Hotels',
+    buyerEmail: 'procurement@heritagehaveli.in',
+    buyerPhone: '+91 98201 45890',
+    buyerType: 'hotel',
+    customizationNotes: 'Custom turquoise glaze logo imprint on vase base for hotel suites.',
+    status: 'in_review',
+    createdAt: '2026-02-28T10:30:00.000Z'
+  },
+  {
+    id: 'b2b-2',
+    productId: 'craft-4',
+    productTitle: 'Natural Organic Lacquer Wooden Stacking Rings',
+    craftCategory: 'woodcraft',
+    artisanId: 'artisan-4',
+    artisanName: 'Manjunatha Gowda',
+    quantity: 250,
+    targetDeliveryDate: '2026-05-01',
+    buyerName: 'Priyanka Sen',
+    buyerOrganization: 'TinySprouts Eco Montessori Schools',
+    buyerEmail: 'supplies@tinysprouts.org',
+    buyerPhone: '+91 98450 78210',
+    buyerType: 'corporate_gift',
+    customizationNotes: 'Non-toxic vegetable dye certification batch report required with shipment.',
+    status: 'connected',
+    createdAt: '2026-03-01T14:15:00.000Z'
+  }
+];
 
 export const MarketplaceProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // Load initial products from local storage or sample data
@@ -102,6 +144,14 @@ export const MarketplaceProvider: React.FC<{ children: React.ReactNode }> = ({ c
       try { return JSON.parse(saved); } catch (e) { console.error(e); }
     }
     return [];
+  });
+
+  const [b2bInquiries, setB2bInquiries] = useState<B2BInquiry[]>(() => {
+    const saved = localStorage.getItem(LOCAL_STORAGE_B2B);
+    if (saved) {
+      try { return JSON.parse(saved); } catch (e) { console.error(e); }
+    }
+    return INITIAL_B2B_INQUIRIES;
   });
 
   // Current active artisan persona (Radha Devi / Master Ramnarayan)
@@ -260,6 +310,7 @@ export const MarketplaceProvider: React.FC<{ children: React.ReactNode }> = ({ c
       originRegion: aiResult.originRegion || activeArtisan.village,
       giTagStatus: {
         hasGiTag: aiResult.hasGiTag,
+        verificationStatus: aiResult.giVerificationStatus || (aiResult.hasGiTag ? 'ai_suggested' : 'not_verified'),
         registeredName: aiResult.giTagName
       },
       materialsUsed: aiResult.materials,
@@ -269,24 +320,15 @@ export const MarketplaceProvider: React.FC<{ children: React.ReactNode }> = ({ c
       productionTimeDays: Math.round(aiResult.priceBreakdown.artisanLaborHours / 3) || 4,
       ecoFriendly: true,
       stockCount: 10,
-      rating: 5.0,
-      reviewCount: 1,
-      reviews: [
-        {
-          id: `rev-${Date.now()}`,
-          userName: 'Marketplace Curator',
-          rating: 5,
-          date: new Date().toISOString().split('T')[0],
-          comment: 'Verified genuine handicraft with authentic GI-grade technique and fair-trade pricing.',
-          verifiedPurchase: true
-        }
-      ],
+      rating: 0,
+      reviewCount: 0,
+      reviews: [],
       priceBreakdown: aiResult.priceBreakdown,
       socialBlurbs: {
         whatsapp: aiResult.socialBlurbWhatsApp,
         instagram: aiResult.socialBlurbInstagram
       },
-      tags: [aiResult.category, aiResult.originState, 'Handmade', 'AI Verified', 'Fair Trade'],
+      tags: [aiResult.category, aiResult.originState, 'Handmade', 'AI-Assisted', 'Fair Trade'],
       createdAt: new Date().toISOString(),
       isAiGenerated: true
     };
@@ -295,6 +337,21 @@ export const MarketplaceProvider: React.FC<{ children: React.ReactNode }> = ({ c
     triggerConfetti();
     showToast(t('publishedSuccess'), 'success');
     return newProduct;
+  };
+
+  // Submit B2B Bulk Inquiry
+  const submitB2BInquiry = (
+    inquiryData: Omit<B2BInquiry, 'id' | 'status' | 'createdAt'>
+  ): B2BInquiry => {
+    const newInquiry: B2BInquiry = {
+      ...inquiryData,
+      id: `b2b-${Date.now()}`,
+      status: 'pending',
+      createdAt: new Date().toISOString()
+    };
+    setB2bInquiries((prev) => [newInquiry, ...prev]);
+    showToast('B2B Bulk Inquiry submitted! The artisan guild will review and connect shortly.', 'success');
+    return newInquiry;
   };
 
   // Create Order
@@ -333,6 +390,7 @@ export const MarketplaceProvider: React.FC<{ children: React.ReactNode }> = ({ c
         isCheckoutOpen,
         artisanTip,
         recentOrders,
+        b2bInquiries,
         activeArtisan,
         toastMessage,
         setActiveLanguage,
@@ -350,6 +408,7 @@ export const MarketplaceProvider: React.FC<{ children: React.ReactNode }> = ({ c
         isWishlisted,
         publishNewCraft,
         createOrder,
+        submitB2BInquiry,
         t,
         formatPrice,
         showToast,

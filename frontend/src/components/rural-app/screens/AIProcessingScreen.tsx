@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { ArrowLeft, Check, Sparkles, Bot } from 'lucide-react';
-import { playSoundEffect, speakText } from '../../../services/voiceAssistant';
+import { ArrowLeft, Check, Sparkles } from 'lucide-react';
+import { playSoundEffect } from '../../../services/voiceAssistant';
+import { useMarketplace } from '../../../context/MarketplaceContext';
 
 interface AIProcessingScreenProps {
   onBack: () => void;
@@ -11,13 +12,14 @@ export const AIProcessingScreen: React.FC<AIProcessingScreenProps> = ({
   onBack,
   onComplete
 }) => {
+  const { t } = useMarketplace();
   const [currentStep, setCurrentStep] = useState(1);
 
   const steps = [
-    { id: 1, title: 'फोटो बेहतर बना रहा है', sub: 'Enhancing Photo' },
-    { id: 2, title: 'सामान पहचान रहा है', sub: 'Recognizing Craft' },
-    { id: 3, title: 'जानकारी लिख रहा है', sub: 'Writing Description' },
-    { id: 4, title: 'कीमत का अनुमान लगा रहा है', sub: 'Calculating Fair Price' }
+    { id: 1, title: t('enhancingPhoto') },
+    { id: 2, title: t('recognizingCraft') },
+    { id: 3, title: t('writingDescription') },
+    { id: 4, title: t('calculatingPrice') }
   ];
 
   useEffect(() => {
@@ -56,7 +58,7 @@ export const AIProcessingScreen: React.FC<AIProcessingScreenProps> = ({
   }, [onComplete]);
 
   return (
-    <div className="min-h-full flex flex-col justify-between bg-[#FAF6ED] text-[#2C241E] select-none p-5">
+    <div className="min-h-full flex flex-col justify-between bg-[#FAF6ED] text-[#2C241E] select-none p-5 max-w-xl mx-auto w-full">
       
       {/* Top Bar */}
       <div className="flex items-center justify-between pt-1">
@@ -71,43 +73,38 @@ export const AIProcessingScreen: React.FC<AIProcessingScreenProps> = ({
         </button>
 
         <h1 className="text-lg font-black text-[#1E3A1E] font-sans">
-          AI काम कर रहा है...
+          {t('aiWorking')}
         </h1>
 
         <div className="w-10"></div>
       </div>
 
       {/* Center Animated Robot Mascot */}
-      <div className="my-auto py-4 flex flex-col items-center">
+      <div className="my-auto py-6 flex flex-col items-center">
         
-        {/* Cute AI Bot Mascot Illustration */}
+        {/* AI Bot Mascot Illustration */}
         <div className="relative mb-6">
-          {/* Pulsing Aura */}
           <div className="absolute inset-0 rounded-full bg-[#3A6B35]/20 blur-xl animate-pulse"></div>
           
           <div className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-3xl bg-gradient-to-b from-[#EAF4E6] to-[#D5EAD0] border-3 border-[#A5CD84] flex flex-col items-center justify-center shadow-lg animate-float">
-            {/* Bot Head Details */}
             <div className="w-16 h-12 rounded-2xl bg-[#1E3A1E] border-2 border-[#8AC172] flex items-center justify-around px-2 shadow-inner">
-              {/* Bot Eyes */}
               <div className="w-3 h-3 rounded-full bg-[#52D34E] shadow-[0_0_8px_#52D34E] animate-pulse"></div>
               <div className="w-3 h-3 rounded-full bg-[#52D34E] shadow-[0_0_8px_#52D34E] animate-pulse"></div>
             </div>
             
-            {/* Bot Antenna */}
             <div className="absolute -top-3 w-1.5 h-3.5 bg-[#8AC172] rounded-t-full flex items-center justify-center">
               <div className="w-3.5 h-3.5 rounded-full bg-[#E67E22] -mt-3 shadow-md animate-bounce-short"></div>
             </div>
 
-            {/* Sparkles icon */}
             <div className="mt-2 flex items-center gap-1 text-[11px] font-black text-[#2C5528]">
               <Sparkles className="w-3.5 h-3.5 text-[#E67E22]" />
-              <span>हस्तकला AI</span>
+              <span>{t('hastakalaAI')}</span>
             </div>
           </div>
         </div>
 
         {/* 4-Step Animated Checklist */}
-        <div className="w-full max-w-[320px] space-y-3.5 bg-white p-5 rounded-3xl border border-[#E5DAC8] shadow-sm">
+        <div className="w-full max-w-sm space-y-3.5 bg-white p-5 rounded-3xl border border-[#E5DAC8] shadow-sm">
           {steps.map((step) => {
             const isDone = currentStep > step.id;
             const isCurrent = currentStep === step.id;
@@ -156,10 +153,10 @@ export const AIProcessingScreen: React.FC<AIProcessingScreenProps> = ({
       {/* Bottom Status Text */}
       <div className="text-center py-2">
         <p className="text-sm font-black text-[#5A4838] animate-pulse">
-          बस थोड़ी देर और...
+          {t('justAMoment')}
         </p>
-        <p className="text-[11px] font-semibold text-[#8A7B6E] mt-0.5">
-          AI आपकी फोटो को पढ़कर सारी जानकारी लिख रहा है
+        <p className="text-xs font-semibold text-[#8A7B6E] mt-0.5">
+          {t('aiReadingPhoto')}
         </p>
       </div>
 

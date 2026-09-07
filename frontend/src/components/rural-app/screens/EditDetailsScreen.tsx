@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ArrowLeft, ArrowRight, Edit3, Plus, Minus, Volume2, Check } from 'lucide-react';
 import { speakText, playSoundEffect } from '../../../services/voiceAssistant';
+import { useMarketplace } from '../../../context/MarketplaceContext';
 
 interface EditDetailsScreenProps {
   initialName: string;
@@ -19,6 +20,7 @@ export const EditDetailsScreen: React.FC<EditDetailsScreenProps> = ({
   onBack,
   onConfirm
 }) => {
+  const { t, activeLanguage } = useMarketplace();
   const [name, setName] = useState(initialName);
   const [category, setCategory] = useState(initialCategory);
   const [price, setPrice] = useState(initialPrice);
@@ -28,7 +30,11 @@ export const EditDetailsScreen: React.FC<EditDetailsScreenProps> = ({
 
   const handleVoiceAdvice = () => {
     playSoundEffect('tap');
-    speakText('यदि आप नाम, श्रेणी, कीमत या विवरण बदलना चाहते हैं तो पेंसिल आइकन पर टैप करें। कीमत बढ़ाने या घटाने के लिए प्लस या माइनस दबाएं।');
+    if (activeLanguage === 'en') {
+      speakText('If you wish to edit title, category, price or description, tap the pencil icon. Use the plus and minus buttons to adjust price.');
+    } else {
+      speakText('यदि आप नाम, श्रेणी, कीमत या विवरण बदलना चाहते हैं तो पेंसिल आइकन पर टैप करें। कीमत बढ़ाने या घटाने के लिए प्लस या माइनस दबाएं।');
+    }
   };
 
   const handlePriceAdjust = (delta: number) => {
@@ -43,10 +49,10 @@ export const EditDetailsScreen: React.FC<EditDetailsScreenProps> = ({
   };
 
   return (
-    <div className="min-h-full flex flex-col justify-between bg-[#FAF6ED] text-[#2C241E] select-none p-4 sm:p-5">
+    <div className="min-h-full flex flex-col justify-between bg-[#FAF6ED] text-[#2C241E] select-none p-4 sm:p-6 w-full">
       
       {/* Top Header */}
-      <div className="space-y-4">
+      <div className="space-y-6">
         <div className="flex items-center justify-between pt-1">
           <button
             onClick={() => {
@@ -58,32 +64,32 @@ export const EditDetailsScreen: React.FC<EditDetailsScreenProps> = ({
             <ArrowLeft className="w-5 h-5 stroke-[2.5]" />
           </button>
 
-          <h1 className="text-lg font-black text-[#1E3A1E] font-sans">
-            जाँचें और बदलें
+          <h1 className="text-xl font-black text-[#1E3A1E] font-sans">
+            {t('checkAndEdit')}
           </h1>
 
           <button
             onClick={handleVoiceAdvice}
             className="p-2.5 rounded-2xl bg-[#E8F0E3] border border-[#3A6B35]/30 text-[#3A6B35] shadow-sm hover:bg-[#DCEAD5]"
-            title="निर्देश सुनें"
+            title="Listen advice"
           >
             <Volume2 className="w-4 h-4" />
           </button>
         </div>
 
         {/* Section Instructions */}
-        <p className="text-xs font-bold text-[#7D6E5D] text-center">
-          जानकारी सही है तो आगे बढ़ें, या बदलने के लिए पेंसिल पर टैप करें
+        <p className="text-xs sm:text-sm font-bold text-[#7D6E5D] text-center max-w-lg mx-auto">
+          {t('editInstructions')}
         </p>
 
-        {/* 4 EDITABLE TILES */}
-        <div className="space-y-3 pt-1">
+        {/* 4 EDITABLE TILES — Responsive 2-column grid on tablet/desktop */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
           
-          {/* 1. नाम (Name) */}
-          <div className="p-3.5 rounded-2xl bg-white border-2 border-[#E5DAC8] shadow-sm hover:border-[#3A6B35]/40 transition-colors">
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-[11px] font-black text-[#7D6E5D]">
-                नाम (Title)
+          {/* 1. Name */}
+          <div className="p-4 rounded-2xl bg-white border-2 border-[#E5DAC8] shadow-sm hover:border-[#3A6B35]/40 transition-colors">
+            <div className="flex items-center justify-between mb-1.5">
+              <span className="text-xs font-black text-[#7D6E5D]">
+                {t('nameTitle')}
               </span>
               <button
                 onClick={() => setActiveEditingField(activeEditingField === 'name' ? null : 'name')}
@@ -98,7 +104,7 @@ export const EditDetailsScreen: React.FC<EditDetailsScreenProps> = ({
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full text-base font-extrabold text-[#1E3A1E] p-1.5 border border-[#3A6B35] rounded-xl focus:outline-none bg-[#F9F6F0]"
+                  className="w-full text-base font-extrabold text-[#1E3A1E] p-2 border border-[#3A6B35] rounded-xl focus:outline-none bg-[#F9F6F0]"
                   autoFocus
                 />
                 <button
@@ -115,11 +121,11 @@ export const EditDetailsScreen: React.FC<EditDetailsScreenProps> = ({
             )}
           </div>
 
-          {/* 2. श्रेणी (Category) */}
-          <div className="p-3.5 rounded-2xl bg-white border-2 border-[#E5DAC8] shadow-sm hover:border-[#3A6B35]/40 transition-colors">
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-[11px] font-black text-[#7D6E5D]">
-                श्रेणी (Category)
+          {/* 2. Category */}
+          <div className="p-4 rounded-2xl bg-white border-2 border-[#E5DAC8] shadow-sm hover:border-[#3A6B35]/40 transition-colors">
+            <div className="flex items-center justify-between mb-1.5">
+              <span className="text-xs font-black text-[#7D6E5D]">
+                {t('categoryLabel')}
               </span>
               <button
                 onClick={() => setActiveEditingField(activeEditingField === 'category' ? null : 'category')}
@@ -152,14 +158,14 @@ export const EditDetailsScreen: React.FC<EditDetailsScreenProps> = ({
             )}
           </div>
 
-          {/* 3. कीमत (Price with +/- quick adjustment buttons) */}
-          <div className="p-3.5 rounded-2xl bg-white border-2 border-[#E5DAC8] shadow-sm hover:border-[#3A6B35]/40 transition-colors">
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-[11px] font-black text-[#7D6E5D]">
-                कीमत (Price in ₹)
+          {/* 3. Price */}
+          <div className="p-4 rounded-2xl bg-white border-2 border-[#E5DAC8] shadow-sm hover:border-[#3A6B35]/40 transition-colors">
+            <div className="flex items-center justify-between mb-1.5">
+              <span className="text-xs font-black text-[#7D6E5D]">
+                {t('priceLabel')}
               </span>
-              <span className="text-[10px] font-bold text-[#3A6B35]">
-                + / - से बदलें
+              <span className="text-xs font-bold text-[#3A6B35]">
+                {t('adjustWithPlusMinus')}
               </span>
             </div>
             <div className="flex items-center justify-between mt-1">
@@ -167,19 +173,18 @@ export const EditDetailsScreen: React.FC<EditDetailsScreenProps> = ({
                 ₹{price.toLocaleString('en-IN')}
               </span>
               
-              {/* Easy +/- buttons for rural artisans */}
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => handlePriceAdjust(-50)}
-                  className="w-9 h-9 rounded-xl bg-[#FAF0DD] border border-[#EAD0A8] text-[#935213] flex items-center justify-center font-bold hover:bg-[#F4E3C6] active:scale-95 transition-all shadow-sm"
-                  title="₹50 कम करें"
+                  className="w-10 h-10 rounded-xl bg-[#FAF0DD] border border-[#EAD0A8] text-[#935213] flex items-center justify-center font-bold hover:bg-[#F4E3C6] active:scale-95 transition-all shadow-sm"
+                  title="-₹50"
                 >
                   <Minus className="w-4 h-4 stroke-[3]" />
                 </button>
                 <button
                   onClick={() => handlePriceAdjust(50)}
-                  className="w-9 h-9 rounded-xl bg-[#3A6B35] text-white flex items-center justify-center font-bold hover:bg-[#2C5528] active:scale-95 transition-all shadow-sm"
-                  title="₹50 बढ़ाएं"
+                  className="w-10 h-10 rounded-xl bg-[#3A6B35] text-white flex items-center justify-center font-bold hover:bg-[#2C5528] active:scale-95 transition-all shadow-sm"
+                  title="+₹50"
                 >
                   <Plus className="w-4 h-4 stroke-[3]" />
                 </button>
@@ -187,11 +192,11 @@ export const EditDetailsScreen: React.FC<EditDetailsScreenProps> = ({
             </div>
           </div>
 
-          {/* 4. विवरण (Description) */}
-          <div className="p-3.5 rounded-2xl bg-white border-2 border-[#E5DAC8] shadow-sm hover:border-[#3A6B35]/40 transition-colors">
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-[11px] font-black text-[#7D6E5D]">
-                विवरण (Description)
+          {/* 4. Description */}
+          <div className="p-4 rounded-2xl bg-white border-2 border-[#E5DAC8] shadow-sm hover:border-[#3A6B35]/40 transition-colors">
+            <div className="flex items-center justify-between mb-1.5">
+              <span className="text-xs font-black text-[#7D6E5D]">
+                {t('descriptionLabel')}
               </span>
               <button
                 onClick={() => setActiveEditingField(activeEditingField === 'desc' ? null : 'desc')}
@@ -210,13 +215,13 @@ export const EditDetailsScreen: React.FC<EditDetailsScreenProps> = ({
                 />
                 <button
                   onClick={() => setActiveEditingField(null)}
-                  className="w-full py-1.5 rounded-xl bg-[#3A6B35] text-white text-xs font-bold"
+                  className="w-full py-2 rounded-xl bg-[#3A6B35] text-white text-xs font-bold"
                 >
-                  बदलाव सुरक्षित करें
+                  {t('saveChanges')}
                 </button>
               </div>
             ) : (
-              <p className="text-xs font-semibold text-[#4A3E31] leading-relaxed">
+              <p className="text-xs sm:text-sm font-semibold text-[#4A3E31] leading-relaxed">
                 {description}
               </p>
             )}
@@ -225,13 +230,13 @@ export const EditDetailsScreen: React.FC<EditDetailsScreenProps> = ({
         </div>
       </div>
 
-      {/* Big Action CTA: "ठीक है, आगे बढ़ें ->" */}
-      <div className="pt-4">
+      {/* Action CTA */}
+      <div className="pt-6">
         <button
           onClick={handleDone}
-          className="w-full py-4 px-6 rounded-2xl bg-[#3A6B35] hover:bg-[#2F582B] active:scale-[0.98] text-white font-extrabold text-lg flex items-center justify-center gap-3 shadow-lg shadow-[#3A6B35]/30 transition-all"
+          className="w-full max-w-xl mx-auto py-4 px-6 rounded-2xl bg-[#3A6B35] hover:bg-[#2F582B] active:scale-[0.98] text-white font-extrabold text-lg flex items-center justify-center gap-3 shadow-lg shadow-[#3A6B35]/30 transition-all"
         >
-          <span>ठीक है, आगे बढ़ें</span>
+          <span>{t('okContinue')}</span>
           <ArrowRight className="w-5 h-5 stroke-[2.5]" />
         </button>
       </div>

@@ -50,15 +50,19 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         {/* Top Badges (GI Tag, AI Verified) */}
         <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10">
           {product.giTagStatus.hasGiTag && (
-            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-500/90 backdrop-blur-md text-white text-[10px] font-black uppercase tracking-wider shadow-sm">
+            <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full backdrop-blur-md text-[10px] font-black uppercase tracking-wider shadow-sm ${
+              product.giTagStatus.verificationStatus === 'verified'
+                ? 'bg-emerald-600/90 text-white'
+                : 'bg-amber-600/90 text-white'
+            }`}>
               <Award className="w-3 h-3" />
-              <span>GI Tagged</span>
+              <span>{product.giTagStatus.verificationStatus === 'verified' ? '✓ GI Verified' : '? AI-Suggested GI'}</span>
             </span>
           )}
           {product.isAiGenerated && (
             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-artisan-indigo/90 backdrop-blur-md text-amber-300 text-[9px] font-bold uppercase tracking-wider">
               <Sparkles className="w-2.5 h-2.5" />
-              <span>AI Studio Live</span>
+              <span>AI-Assisted</span>
             </span>
           )}
         </div>
@@ -120,11 +124,17 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             <span className="capitalize font-semibold text-artisan-terracotta text-[11px] tracking-wide uppercase">
               {product.category}
             </span>
-            <div className="flex items-center gap-1 text-amber-500 font-bold">
-              <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-              <span>{product.rating.toFixed(1)}</span>
-              <span className="text-artisan-slate/40 text-[10px]">({product.reviewCount})</span>
-            </div>
+            {product.reviewCount > 0 ? (
+              <div className="flex items-center gap-1 text-amber-500 font-bold">
+                <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                <span>{product.rating.toFixed(1)}</span>
+                <span className="text-artisan-slate/40 text-[10px]">({product.reviewCount})</span>
+              </div>
+            ) : (
+              <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">
+                🌱 {t('newCraft')}
+              </span>
+            )}
           </div>
 
           {/* Title */}

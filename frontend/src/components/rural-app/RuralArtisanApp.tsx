@@ -36,10 +36,10 @@ const LOCAL_STORAGE_RURAL_PRODUCTS = 'hastkala_rural_products_v1';
 const LOCAL_STORAGE_RURAL_ONBOARDED = 'hastkala_rural_onboarded_v1';
 
 export const RuralArtisanApp: React.FC = () => {
-  const { setCurrentView, publishNewCraft, showToast } = useMarketplace();
+  // ─── Use GLOBAL language from MarketplaceContext (unified) ───
+  const { setCurrentView, publishNewCraft, showToast, activeLanguage, setActiveLanguage, t } = useMarketplace();
 
-  // Artisan & Language State
-  const [selectedLanguage, setSelectedLanguage] = useState('hi');
+  // Artisan State (no more local selectedLanguage!)
   const [artisan, setArtisan] = useState<RuralArtisanUser>(DEFAULT_RURAL_ARTISAN);
 
   // Products State
@@ -199,12 +199,18 @@ export const RuralArtisanApp: React.FC = () => {
       originRegion: artisan.village,
       originState: artisan.state,
       hasGiTag: false,
+      giVerificationStatus: 'not_verified',
+      resultSource: 'backend_api',
       priceBreakdown: {
         rawMaterialCost: Math.round(wizardPrice * 0.3),
         artisanLaborHours: 12,
         hourlyFairWageRate: 45,
         fairLaborCost: Math.round(wizardPrice * 0.55),
         packagingAndLogistics: Math.round(wizardPrice * 0.15),
+        fairMargin: Math.round(wizardPrice * 0.2),
+        marketRangeMin: Math.round(wizardPrice * 0.85),
+        marketRangeMax: Math.round(wizardPrice * 1.3),
+        estimationBasis: 'artisan_input',
         suggestedPrice: wizardPrice,
         minPrice: Math.round(wizardPrice * 0.85),
         artisanDirectSharePercent: 92
@@ -231,7 +237,7 @@ export const RuralArtisanApp: React.FC = () => {
   // Delete product handler
   const handleDeleteProduct = (id: string) => {
     setProducts(prev => prev.filter(p => p.id !== id));
-    showToast('सामान हटा दिया गया', 'info');
+    showToast(t('itemRemoved'), 'info');
   };
 
   // Reset entire app to initial demo
@@ -241,7 +247,7 @@ export const RuralArtisanApp: React.FC = () => {
     setProducts(INITIAL_RURAL_PRODUCTS);
     setCurrentScreen('welcome');
     setActiveTab('home');
-    showToast('ऐप पुनः रीसेट किया गया', 'info');
+    showToast(t('appResetDone'), 'info');
   };
 
   // Show bottom tab bar on main pages
@@ -251,20 +257,20 @@ export const RuralArtisanApp: React.FC = () => {
     <RuralAppFrame
       onSwitchToWebMarketplace={() => setCurrentView('marketplace')}
       onResetApp={handleResetApp}
-      currentScreenTitle="हुनर से बाजार तक"
+      currentScreenTitle={t('ruralAppTitle')}
     >
       <div className="flex-1 flex flex-col justify-between overflow-y-auto">
         
-        {/* SCREEN 1: Welcome & Language Selector */}
+        {/* SCREEN 1: Welcome & Language Selector — now uses global setActiveLanguage */}
         {currentScreen === 'welcome' && (
           <WelcomeScreen
-            selectedLanguage={selectedLanguage}
-            onSelectLanguage={setSelectedLanguage}
+            selectedLanguage={activeLanguage}
+            onSelectLanguage={(lang) => setActiveLanguage(lang as any)}
             onProceed={handleWelcomeProceed}
           />
         )}
 
-        {/* SCREEN 2: Home Screen ("नमस्ते! आज क्या बेचना चाहेंगे?") */}
+        {/* SCREEN 2: Home Screen */}
         {currentScreen === 'home' && (
           <HomeScreen
             artisan={artisan}
@@ -328,7 +334,7 @@ export const RuralArtisanApp: React.FC = () => {
           />
         )}
 
-        {/* SCREEN 8: Publish Confirmation (Namaste Woman Mascot) */}
+        {/* SCREEN 8: Publish Confirmation */}
         {currentScreen === 'publish-confirm' && (
           <PublishConfirmScreen
             image={wizardImage}
@@ -378,62 +384,64 @@ export const RuralArtisanApp: React.FC = () => {
 
       </div>
 
-      {/* 4-TAB BOTTOM NAVIGATION BAR (Home, My Items, Bazaar, Account) */}
+      {/* 4-TAB BOTTOM NAVIGATION BAR — Translated & Responsive */}
       {isMainTabScreen && (
-        <div className="bg-white border-t border-[#E5DAC8] py-2 px-3 flex items-center justify-around z-30 shadow-lg select-none">
-          
-          {/* Tab 1: Home (होम) */}
-          <button
-            onClick={() => handleTabChange('home')}
-            className={`flex flex-col items-center gap-0.5 py-1 px-3 rounded-2xl transition-all ${
-              activeTab === 'home'
-                ? 'text-[#3A6B35] font-black scale-105'
-                : 'text-[#8A7B6E] font-bold hover:text-[#3B3026]'
-            }`}
-          >
-            <Home className={`w-5 h-5 ${activeTab === 'home' ? 'stroke-[2.8]' : 'stroke-2'}`} />
-            <span className="text-[10px]">होम</span>
-          </button>
+        <div className="w-full bg-white/95 backdrop-blur-md border-t border-[#E5DAC8] py-2 px-3 z-30 shadow-lg select-none sticky bottom-0">
+          <div className="max-w-md mx-auto flex items-center justify-around">
+            
+            {/* Tab 1: Home */}
+            <button
+              onClick={() => handleTabChange('home')}
+              className={`flex flex-col items-center gap-0.5 py-1 px-4 rounded-2xl transition-all ${
+                activeTab === 'home'
+                  ? 'text-[#3A6B35] font-black scale-105'
+                  : 'text-[#8A7B6E] font-bold hover:text-[#3B3026]'
+              }`}
+            >
+              <Home className={`w-5 h-5 ${activeTab === 'home' ? 'stroke-[2.8]' : 'stroke-2'}`} />
+              <span className="text-[10px]">{t('tabHome')}</span>
+            </button>
 
-          {/* Tab 2: My Items (मेरे सामान) */}
-          <button
-            onClick={() => handleTabChange('my-items')}
-            className={`flex flex-col items-center gap-0.5 py-1 px-3 rounded-2xl transition-all ${
-              activeTab === 'my-items'
-                ? 'text-[#3A6B35] font-black scale-105'
-                : 'text-[#8A7B6E] font-bold hover:text-[#3B3026]'
-            }`}
-          >
-            <Package className={`w-5 h-5 ${activeTab === 'my-items' ? 'stroke-[2.8]' : 'stroke-2'}`} />
-            <span className="text-[10px]">मेरे सामान</span>
-          </button>
+            {/* Tab 2: My Items */}
+            <button
+              onClick={() => handleTabChange('my-items')}
+              className={`flex flex-col items-center gap-0.5 py-1 px-4 rounded-2xl transition-all ${
+                activeTab === 'my-items'
+                  ? 'text-[#3A6B35] font-black scale-105'
+                  : 'text-[#8A7B6E] font-bold hover:text-[#3B3026]'
+              }`}
+            >
+              <Package className={`w-5 h-5 ${activeTab === 'my-items' ? 'stroke-[2.8]' : 'stroke-2'}`} />
+              <span className="text-[10px]">{t('tabMyItems')}</span>
+            </button>
 
-          {/* Tab 3: Bazaar (बाज़ार) */}
-          <button
-            onClick={() => handleTabChange('bazaar')}
-            className={`flex flex-col items-center gap-0.5 py-1 px-3 rounded-2xl transition-all ${
-              activeTab === 'bazaar'
-                ? 'text-[#3A6B35] font-black scale-105'
-                : 'text-[#8A7B6E] font-bold hover:text-[#3B3026]'
-            }`}
-          >
-            <ShoppingBag className={`w-5 h-5 ${activeTab === 'bazaar' ? 'stroke-[2.8]' : 'stroke-2'}`} />
-            <span className="text-[10px]">बाज़ार</span>
-          </button>
+            {/* Tab 3: Bazaar */}
+            <button
+              onClick={() => handleTabChange('bazaar')}
+              className={`flex flex-col items-center gap-0.5 py-1 px-4 rounded-2xl transition-all ${
+                activeTab === 'bazaar'
+                  ? 'text-[#3A6B35] font-black scale-105'
+                  : 'text-[#8A7B6E] font-bold hover:text-[#3B3026]'
+              }`}
+            >
+              <ShoppingBag className={`w-5 h-5 ${activeTab === 'bazaar' ? 'stroke-[2.8]' : 'stroke-2'}`} />
+              <span className="text-[10px]">{t('tabBazaar')}</span>
+            </button>
 
-          {/* Tab 4: Account (मेरा खाता) */}
-          <button
-            onClick={() => handleTabChange('account')}
-            className={`flex flex-col items-center gap-0.5 py-1 px-3 rounded-2xl transition-all ${
-              activeTab === 'account'
-                ? 'text-[#3A6B35] font-black scale-105'
-                : 'text-[#8A7B6E] font-bold hover:text-[#3B3026]'
-            }`}
-          >
-            <User className={`w-5 h-5 ${activeTab === 'account' ? 'stroke-[2.8]' : 'stroke-2'}`} />
-            <span className="text-[10px]">मेरा खाता</span>
-          </button>
+            {/* Tab 4: Account */}
+            <button
+              onClick={() => handleTabChange('account')}
+              className={`flex flex-col items-center gap-0.5 py-1 px-4 rounded-2xl transition-all ${
+                activeTab === 'account'
+                  ? 'text-[#3A6B35] font-black scale-105'
+                  : 'text-[#8A7B6E] font-bold hover:text-[#3B3026]'
+              }`}
+            >
+              <User className={`w-5 h-5 ${activeTab === 'account' ? 'stroke-[2.8]' : 'stroke-2'}`} />
+              <span className="text-[10px]">{t('tabAccount')}</span>
+            </button>
 
+          </div>
         </div>
       )}
 
@@ -446,12 +454,12 @@ export const RuralArtisanApp: React.FC = () => {
         />
       )}
 
-      {/* Notifications Modal */}
+      {/* Notifications Modal — Translated */}
       {showNotificationsModal && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-[#FAF6ED] w-full max-w-sm rounded-3xl p-5 border-2 border-[#E5DAC8] shadow-2xl space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-black text-[#1E3A1E]">सूचनाएं (Notifications)</h3>
+              <h3 className="text-lg font-black text-[#1E3A1E]">{t('notifications')}</h3>
               <button onClick={() => setShowNotificationsModal(false)} className="p-1 font-black">✕</button>
             </div>
 
@@ -459,23 +467,27 @@ export const RuralArtisanApp: React.FC = () => {
               <div className="p-3 bg-white rounded-2xl border border-[#E5DAC8]">
                 <div className="flex items-center gap-2">
                   <span className="text-base">🎉</span>
-                  <p className="text-xs font-black text-[#1E3A1E]">नया ऑर्डर प्राप्त हुआ!</p>
+                  <p className="text-xs font-black text-[#1E3A1E]">{t('newOrderReceived')}</p>
                 </div>
                 <p className="text-[11px] text-[#5A4838] mt-1">
-                  आपके सामान "बाँस की टोकरी" के लिए ₹800 का नया ऑर्डर आया है।
+                  {activeLanguage === 'en' 
+                    ? 'A new order of ₹800 was placed for your "Bamboo Basket".'
+                    : 'आपके सामान "बाँस की टोकरी" के लिए ₹800 का नया ऑर्डर आया है।'}
                 </p>
-                <span className="text-[9px] text-[#8A7B6E] block mt-1">2 घंटे पहले</span>
+                <span className="text-[9px] text-[#8A7B6E] block mt-1">2 {t('hoursAgo')}</span>
               </div>
 
               <div className="p-3 bg-white rounded-2xl border border-[#E5DAC8]">
                 <div className="flex items-center gap-2">
                   <span className="text-base">🌾</span>
-                  <p className="text-xs font-black text-[#1E3A1E]">सरस आजीविका मेला</p>
+                  <p className="text-xs font-black text-[#1E3A1E]">{t('craftMelaEvent')}</p>
                 </div>
                 <p className="text-[11px] text-[#5A4838] mt-1">
-                  आगामी शिल्प मेले में भाग लेने के लिए ग्राम समन्वयक से संपर्क करें।
+                  {activeLanguage === 'en'
+                    ? 'Contact your village coordinator to participate in the upcoming craft mela.'
+                    : 'आगामी शिल्प मेले में भाग लेने के लिए ग्राम समन्वयक से संपर्क करें।'}
                 </p>
-                <span className="text-[9px] text-[#8A7B6E] block mt-1">1 दिन पहले</span>
+                <span className="text-[9px] text-[#8A7B6E] block mt-1">1 {t('dayAgo')}</span>
               </div>
             </div>
 
@@ -483,7 +495,7 @@ export const RuralArtisanApp: React.FC = () => {
               onClick={() => setShowNotificationsModal(false)}
               className="w-full py-3 rounded-xl bg-[#3A6B35] text-white font-bold text-sm"
             >
-              ठीक है
+              {t('ok')}
             </button>
           </div>
         </div>

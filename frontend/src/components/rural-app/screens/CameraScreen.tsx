@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Zap, ZapOff, RefreshCw, Volume2, Sparkles, Check } from 'lucide-react';
+import { ArrowLeft, Zap, ZapOff, RefreshCw, Volume2, Sparkles } from 'lucide-react';
 import { DEMO_CRAFT_PRESETS } from '../data/ruralAppDefaults';
 import { speakText, playSoundEffect } from '../../../services/voiceAssistant';
+import { useMarketplace } from '../../../context/MarketplaceContext';
 
 interface CameraScreenProps {
   onBack: () => void;
@@ -12,6 +13,7 @@ export const CameraScreen: React.FC<CameraScreenProps> = ({
   onBack,
   onCapture
 }) => {
+  const { t, activeLanguage } = useMarketplace();
   const [selectedPresetIdx, setSelectedPresetIdx] = useState(0);
   const [isFlashOn, setIsFlashOn] = useState(false);
   const [isShutterFired, setIsShutterFired] = useState(false);
@@ -20,13 +22,21 @@ export const CameraScreen: React.FC<CameraScreenProps> = ({
 
   const handleVoiceAdvice = () => {
     playSoundEffect('tap');
-    speakText('सामान को अच्छी रोशनी में रखकर बीच में लाएं और नीचे दिए गए बड़े हरे बटन को दबाकर फोटो लें।');
+    if (activeLanguage === 'en') {
+      speakText('Keep your handcrafted item well-lit in the center of the frame and tap the big round green button below to take a photo.');
+    } else {
+      speakText('सामान को अच्छी रोशनी में रखकर बीच में लाएं और नीचे दिए गए बड़े हरे बटन को दबाकर फोटो लें।');
+    }
   };
 
   const handleToggleFlash = () => {
     playSoundEffect('tap');
     setIsFlashOn(!isFlashOn);
-    speakText(isFlashOn ? 'फ्लैश बंद' : 'फ्लैश चालू');
+    if (activeLanguage === 'en') {
+      speakText(isFlashOn ? 'Flash off' : 'Flash on');
+    } else {
+      speakText(isFlashOn ? 'फ्लैश बंद' : 'फ्लैश चालू');
+    }
   };
 
   const handleSwitchCraftPreset = () => {
@@ -46,10 +56,10 @@ export const CameraScreen: React.FC<CameraScreenProps> = ({
   };
 
   return (
-    <div className="min-h-full flex flex-col justify-between bg-[#1B2A1E] text-white select-none">
+    <div className="min-h-full flex flex-col justify-between bg-[#1B2A1E] text-white select-none w-full">
       
       {/* Top Controls Bar */}
-      <div className="p-4 flex items-center justify-between z-10">
+      <div className="p-4 sm:p-5 flex items-center justify-between z-10 max-w-3xl mx-auto w-full">
         <button
           onClick={() => {
             playSoundEffect('tap');
@@ -60,21 +70,21 @@ export const CameraScreen: React.FC<CameraScreenProps> = ({
           <ArrowLeft className="w-5 h-5 stroke-[2.5]" />
         </button>
 
-        <h1 className="text-lg font-black tracking-tight text-white">
-          फोटो लें
+        <h1 className="text-lg sm:text-xl font-black tracking-tight text-white">
+          {t('takePhotoScreen')}
         </h1>
 
         <button
           onClick={handleVoiceAdvice}
           className="p-2.5 rounded-2xl bg-[#3A6B35]/80 backdrop-blur-md border border-[#4E8D47] text-white hover:bg-[#3A6B35] flex items-center gap-1"
-          title="सलाह सुनें"
+          title="Listen advice"
         >
           <Volume2 className="w-4 h-4" />
         </button>
       </div>
 
-      {/* Main Camera Viewfinder with Framing Guides */}
-      <div className="relative flex-1 mx-3 my-1 rounded-3xl overflow-hidden bg-black flex items-center justify-center border-2 border-white/20 shadow-2xl">
+      {/* Main Camera Viewfinder with Framing Guides — Responsive */}
+      <div className="relative flex-1 max-w-2xl w-full mx-auto my-1 rounded-3xl overflow-hidden bg-black flex items-center justify-center border-2 border-white/20 shadow-2xl min-h-[360px] sm:min-h-[480px]">
         
         {/* Craft Image Preview */}
         <img
@@ -121,13 +131,13 @@ export const CameraScreen: React.FC<CameraScreenProps> = ({
         </div>
 
         {/* Advice Pill at Bottom of Viewfinder */}
-        <div className="absolute bottom-3 left-4 right-4 z-20">
-          <div className="p-2.5 rounded-2xl bg-black/65 backdrop-blur-md border border-white/20 text-center">
+        <div className="absolute bottom-3 left-4 right-4 z-20 flex justify-center">
+          <div className="p-2.5 px-4 rounded-2xl bg-black/65 backdrop-blur-md border border-white/20 text-center max-w-sm">
             <p className="text-xs font-black text-white leading-tight">
-              अच्छी फोटो लें
+              {t('takeClearPhoto')}
             </p>
             <p className="text-[10px] font-semibold text-white/80">
-              साफ और रोशनी में रखें
+              {t('keepInLight')}
             </p>
           </div>
         </div>
@@ -135,8 +145,8 @@ export const CameraScreen: React.FC<CameraScreenProps> = ({
       </div>
 
       {/* Quick Craft Switcher Carousel Strip */}
-      <div className="px-4 py-1.5 flex items-center justify-center gap-2 overflow-x-auto">
-        <span className="text-[10px] font-bold text-white/60">नमूना:</span>
+      <div className="px-4 py-2 flex items-center justify-center gap-2 overflow-x-auto max-w-2xl mx-auto w-full">
+        <span className="text-xs font-bold text-white/70">{t('sample')}</span>
         {DEMO_CRAFT_PRESETS.map((preset, idx) => (
           <button
             key={preset.id}
@@ -144,7 +154,7 @@ export const CameraScreen: React.FC<CameraScreenProps> = ({
               playSoundEffect('tap');
               setSelectedPresetIdx(idx);
             }}
-            className={`px-2.5 py-1 rounded-xl text-[11px] font-bold transition-all ${
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
               selectedPresetIdx === idx
                 ? 'bg-[#3A6B35] text-white border border-[#529E4B] shadow'
                 : 'bg-white/10 text-white/70 hover:bg-white/20'
@@ -156,7 +166,7 @@ export const CameraScreen: React.FC<CameraScreenProps> = ({
       </div>
 
       {/* Bottom Camera Controls (Flash, Big Round Green Shutter, Switch) */}
-      <div className="p-5 bg-black/80 backdrop-blur-md border-t border-white/10 flex items-center justify-around z-10">
+      <div className="p-5 bg-black/80 backdrop-blur-md border-t border-white/10 flex items-center justify-around z-10 max-w-3xl mx-auto w-full">
         
         {/* Flash Toggle */}
         <button
@@ -166,7 +176,7 @@ export const CameraScreen: React.FC<CameraScreenProps> = ({
               ? 'bg-amber-400 text-black border-amber-300 shadow-lg shadow-amber-400/30'
               : 'bg-white/10 text-white border-white/20 hover:bg-white/20'
           }`}
-          title="फ्लैश"
+          title="Flash"
         >
           {isFlashOn ? <Zap className="w-5 h-5 fill-black" /> : <ZapOff className="w-5 h-5" />}
         </button>
@@ -185,7 +195,7 @@ export const CameraScreen: React.FC<CameraScreenProps> = ({
         <button
           onClick={handleSwitchCraftPreset}
           className="p-3 rounded-full bg-white/10 text-white border border-white/20 hover:bg-white/20 transition-all flex flex-col items-center gap-0.5"
-          title="बदलें"
+          title="Switch craft"
         >
           <RefreshCw className="w-5 h-5" />
         </button>

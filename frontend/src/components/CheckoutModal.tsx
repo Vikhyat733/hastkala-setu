@@ -25,7 +25,8 @@ export const CheckoutModal: React.FC = () => {
     formatPrice,
     createOrder,
     setCurrentView,
-    activeLanguage
+    activeLanguage,
+    t
   } = useMarketplace();
 
   // Form State
@@ -96,10 +97,10 @@ export const CheckoutModal: React.FC = () => {
             </span>
             <div>
               <h3 className="font-serif font-bold text-base text-artisan-indigo">
-                {step === 'details' ? 'Delivery Address' : step === 'payment' ? 'Simulated Payment (UPI / Card)' : 'Order Confirmed!'}
+                {step === 'details' ? t('deliveryAddress') : step === 'payment' ? t('paymentSimulated') : t('orderConfirmed')}
               </h3>
               <p className="text-[11px] text-artisan-slate/70">
-                Direct fair-trade fulfillment to artisan guild
+                {t('directFulfillment')}
               </p>
             </div>
           </div>
@@ -121,7 +122,7 @@ export const CheckoutModal: React.FC = () => {
               
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-artisan-indigo">Full Name:</label>
+                  <label className="text-xs font-bold text-artisan-indigo">{t('fullName')}:</label>
                   <input
                     type="text"
                     required
@@ -132,7 +133,7 @@ export const CheckoutModal: React.FC = () => {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-artisan-indigo">Phone / WhatsApp Number:</label>
+                  <label className="text-xs font-bold text-artisan-indigo">{t('phoneWhatsApp')}:</label>
                   <input
                     type="text"
                     required
@@ -144,7 +145,7 @@ export const CheckoutModal: React.FC = () => {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-artisan-indigo">Delivery Address & Pin Code:</label>
+                <label className="text-xs font-bold text-artisan-indigo">{t('deliveryAddressLabel')}:</label>
                 <textarea
                   rows={3}
                   required
@@ -157,11 +158,11 @@ export const CheckoutModal: React.FC = () => {
               {/* Order Summary Snapshot */}
               <div className="p-4 rounded-2xl bg-artisan-sand/70 border border-artisan-terracotta/15 flex items-center justify-between text-xs">
                 <div>
-                  <p className="font-bold text-artisan-indigo">{cart.length} Handcrafted Products</p>
-                  <p className="text-[11px] text-artisan-slate/70">Includes Artisan Direct Tip of {formatPrice(artisanTip)}</p>
+                  <p className="font-bold text-artisan-indigo">{cart.length} {t('handcraftedProducts')}</p>
+                  <p className="text-[11px] text-artisan-slate/70">{t('directArtisanTipIncluded')} {formatPrice(artisanTip)}</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-[10px] text-artisan-slate/60 uppercase font-bold">Total Payable</p>
+                  <p className="text-[10px] text-artisan-slate/60 uppercase font-bold">{t('totalPayable')}</p>
                   <p className="text-lg font-black text-artisan-terracotta">{formatPrice(grandTotal)}</p>
                 </div>
               </div>
@@ -170,7 +171,7 @@ export const CheckoutModal: React.FC = () => {
                 type="submit"
                 className="w-full py-3.5 rounded-2xl bg-artisan-terracotta hover:bg-artisan-terracotta-dark text-white font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2"
               >
-                <span>Continue to Payment</span>
+                <span>{t('proceedToPayment')}</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
 
@@ -193,7 +194,7 @@ export const CheckoutModal: React.FC = () => {
                   }`}
                 >
                   <QrCode className="w-6 h-6" />
-                  <span className="text-xs">UPI QR / VPA</span>
+                  <span className="text-xs">{t('upiPayment')}</span>
                 </button>
 
                 <button
@@ -206,7 +207,7 @@ export const CheckoutModal: React.FC = () => {
                   }`}
                 >
                   <CreditCard className="w-6 h-6" />
-                  <span className="text-xs">Card / NetBanking</span>
+                  <span className="text-xs">{t('cardPayment')}</span>
                 </button>
 
                 <button
@@ -219,7 +220,7 @@ export const CheckoutModal: React.FC = () => {
                   }`}
                 >
                   <Banknote className="w-6 h-6" />
-                  <span className="text-xs">Cash on Delivery</span>
+                  <span className="text-xs">{t('cashOnDelivery')}</span>
                 </button>
               </div>
 
@@ -231,11 +232,11 @@ export const CheckoutModal: React.FC = () => {
                     <svg viewBox="0 0 100 100" className="w-full h-full text-artisan-indigo">
                       <path fill="currentColor" d="M10 10h30v30h-30z M20 20h10v10h-10z M60 10h30v30h-30z M70 20h10v10h-10z M10 60h30v30h-30z M20 70h10v10h-10z M60 60h10v10h-10z M80 60h10v10h-10z M70 70h10v10h-10z M60 80h10v10h-10z M80 80h10v10h-10z M45 20h10v10h-10z M45 45h10v10h-10z M20 45h10v10h-10z M70 45h10v10h-10z" />
                     </svg>
-                    <span className="text-[9px] font-bold text-artisan-slate/60 mt-1">Scan via GPay/PhonePe</span>
+                    <span className="text-[9px] font-bold text-artisan-slate/60 mt-1">{t('scanGpayPhonePe')}</span>
                   </div>
 
                   <div className="flex-1 space-y-2 text-left">
-                    <p className="text-xs font-bold text-artisan-indigo">Or Pay via UPI ID:</p>
+                    <p className="text-xs font-bold text-artisan-indigo">{t('orPayViaUpi')}</p>
                     <input
                       type="text"
                       value={upiVpa}
@@ -243,7 +244,7 @@ export const CheckoutModal: React.FC = () => {
                       className="w-full bg-white border border-artisan-terracotta/20 rounded-xl px-3 py-2 text-xs font-mono text-artisan-indigo focus:outline-none"
                     />
                     <p className="text-[10px] text-emerald-700 font-semibold flex items-center gap-1">
-                      <ShieldCheck className="w-3.5 h-3.5" /> 100% Encrypted & Verified Artisan Merchant Escrow
+                      <ShieldCheck className="w-3.5 h-3.5" /> {t('encryptedVerifiedEscrow')}
                     </p>
                   </div>
                 </div>
@@ -252,16 +253,16 @@ export const CheckoutModal: React.FC = () => {
               {paymentMethod === 'card' && (
                 <div className="space-y-3 p-4 rounded-2xl bg-artisan-sand border border-artisan-terracotta/20 text-xs">
                   <div className="space-y-1">
-                    <label className="font-bold">Card Number:</label>
+                    <label className="font-bold">{t('cardNumber')}:</label>
                     <input type="text" defaultValue="4242 •••• •••• 4242" className="w-full bg-white border border-artisan-terracotta/20 rounded-xl px-3 py-2 font-mono" />
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     <div className="space-y-1">
-                      <label className="font-bold">Expiry Date:</label>
+                      <label className="font-bold">{t('expiryDate')}:</label>
                       <input type="text" defaultValue="08/28" className="w-full bg-white border border-artisan-terracotta/20 rounded-xl px-3 py-2 font-mono" />
                     </div>
                     <div className="space-y-1">
-                      <label className="font-bold">CVV:</label>
+                      <label className="font-bold">{t('cvv')}:</label>
                       <input type="password" defaultValue="888" className="w-full bg-white border border-artisan-terracotta/20 rounded-xl px-3 py-2 font-mono" />
                     </div>
                   </div>
@@ -274,7 +275,7 @@ export const CheckoutModal: React.FC = () => {
                   onClick={() => setStep('details')}
                   className="px-4 py-2 text-xs font-bold text-artisan-slate hover:bg-artisan-sand rounded-xl"
                 >
-                  ← Back to Address
+                  {t('backToAddress')}
                 </button>
 
                 <button
@@ -282,7 +283,7 @@ export const CheckoutModal: React.FC = () => {
                   className="px-6 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-lg shadow-emerald-600/30 flex items-center gap-2"
                 >
                   <ShieldCheck className="w-4 h-4 text-emerald-200" />
-                  <span>Simulate Payment ({formatPrice(grandTotal)})</span>
+                  <span>{t('simulatePaymentBtn')} ({formatPrice(grandTotal)})</span>
                 </button>
               </div>
 
@@ -299,32 +300,32 @@ export const CheckoutModal: React.FC = () => {
 
               <div className="space-y-1">
                 <h3 className="font-serif font-bold text-2xl text-artisan-indigo">
-                  Order Successfully Placed!
+                  {t('orderConfirmed')}
                 </h3>
                 <p className="text-xs text-artisan-slate/70">
-                  Order ID: <strong className="font-mono text-artisan-indigo">{confirmedOrder.id}</strong>
+                  {t('orderNumber')} <strong className="font-mono text-artisan-indigo">{confirmedOrder.id}</strong>
                 </p>
                 <p className="text-xs text-emerald-700 font-bold">
-                  Estimated Delivery by {confirmedOrder.estimatedDelivery}
+                  {t('estimatedDeliveryBy')} {confirmedOrder.estimatedDelivery}
                 </p>
               </div>
 
               {/* Order Receipt Box */}
               <div className="p-5 rounded-2xl bg-artisan-sand border border-artisan-terracotta/15 text-left space-y-3 text-xs">
                 <div className="flex justify-between border-b border-artisan-terracotta/10 pb-2">
-                  <span className="font-bold text-artisan-indigo">Delivery To:</span>
+                  <span className="font-bold text-artisan-indigo">{t('deliveryTo')}</span>
                   <span className="text-artisan-slate/80">{confirmedOrder.customerName}</span>
                 </div>
                 <div className="flex justify-between border-b border-artisan-terracotta/10 pb-2">
-                  <span className="font-bold text-artisan-indigo">Tracking Code:</span>
+                  <span className="font-bold text-artisan-indigo">{t('trackingCode')}</span>
                   <span className="font-mono font-bold text-artisan-terracotta">{confirmedOrder.trackingNumber}</span>
                 </div>
                 <div className="flex justify-between border-b border-artisan-terracotta/10 pb-2">
-                  <span className="font-bold text-artisan-indigo">Artisan Guild Tip:</span>
-                  <span className="font-bold text-emerald-700">+{formatPrice(confirmedOrder.artisanTip)} (Directly Credited)</span>
+                  <span className="font-bold text-artisan-indigo">{t('artisanGuildTip')}</span>
+                  <span className="font-bold text-emerald-700">+{formatPrice(confirmedOrder.artisanTip)} {t('directlyCredited')}</span>
                 </div>
                 <div className="flex justify-between pt-1 font-black text-sm text-artisan-indigo">
-                  <span>Grand Total Paid:</span>
+                  <span>{t('grandTotalPaid')}</span>
                   <span className="text-artisan-terracotta">{formatPrice(confirmedOrder.total)}</span>
                 </div>
               </div>
@@ -336,7 +337,7 @@ export const CheckoutModal: React.FC = () => {
                   className="px-4 py-2.5 rounded-xl border border-artisan-terracotta/20 text-artisan-indigo font-bold text-xs hover:bg-artisan-sand flex items-center gap-2"
                 >
                   <Printer className="w-4 h-4 text-artisan-terracotta" />
-                  <span>Print Receipt</span>
+                  <span>{t('printInvoice')}</span>
                 </button>
 
                 <button
@@ -347,7 +348,7 @@ export const CheckoutModal: React.FC = () => {
                   className="px-5 py-2.5 rounded-xl bg-artisan-terracotta text-white font-bold text-xs hover:bg-artisan-terracotta-dark transition-all flex items-center gap-2"
                 >
                   <PackageCheck className="w-4 h-4" />
-                  <span>View in My Orders</span>
+                  <span>{t('viewInMyOrders')}</span>
                 </button>
               </div>
 

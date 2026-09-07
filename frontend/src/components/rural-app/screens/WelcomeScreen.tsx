@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import melaLogo from '../../../assets/mela_logo.png';
 import { Check, ArrowRight, Volume2, Globe } from 'lucide-react';
 import { speakText, playSoundEffect } from '../../../services/voiceAssistant';
+import { useMarketplace } from '../../../context/MarketplaceContext';
+import { SupportedLanguage } from '../../../types';
 
 interface WelcomeScreenProps {
   onProceed: () => void;
-  selectedLanguage: string;
-  onSelectLanguage: (lang: string) => void;
+  selectedLanguage: SupportedLanguage;
+  onSelectLanguage: (lang: SupportedLanguage) => void;
 }
 
 export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
@@ -14,9 +16,10 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
   selectedLanguage,
   onSelectLanguage
 }) => {
+  const { t, activeLanguage } = useMarketplace();
   const [showOtherLangs, setShowOtherLangs] = useState(false);
 
-  const handleLangPick = (lang: string, label: string) => {
+  const handleLangPick = (lang: SupportedLanguage) => {
     playSoundEffect('tap');
     onSelectLanguage(lang);
     if (lang === 'hi') {
@@ -26,7 +29,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
     }
   };
 
-  const otherLanguages = [
+  const otherLanguages: { code: SupportedLanguage; name: string }[] = [
     { code: 'mr', name: 'मराठी' },
     { code: 'bn', name: 'বাংলা' },
     { code: 'gu', name: 'ગુજરાતી' },
@@ -36,11 +39,11 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
   ];
 
   return (
-    <div className="min-h-full flex flex-col justify-between bg-[#FAF6ED] text-[#2C241E] select-none">
+    <div className="min-h-full flex flex-col justify-between bg-[#FAF6ED] text-[#2C241E] select-none max-w-xl mx-auto w-full">
       
       {/* Top Rural Art Illustrated Banner */}
       <div>
-        <div className="relative h-48 sm:h-52 w-full overflow-hidden rounded-b-3xl bg-gradient-to-b from-[#E6F0DC] via-[#D2E7BE] to-[#B8DA9B] shadow-sm border-b border-[#A5CD84]">
+        <div className="relative h-48 sm:h-56 w-full overflow-hidden rounded-b-3xl bg-gradient-to-b from-[#E6F0DC] via-[#D2E7BE] to-[#B8DA9B] shadow-sm border-b border-[#A5CD84]">
           {/* Subtle Village Scene Vector Graphics */}
           <div className="absolute top-4 right-6 w-14 h-14 rounded-full bg-[#FFE57F]/80 blur-[1px] animate-pulse-slow"></div>
           
@@ -60,35 +63,32 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
             
             {/* Village Huts & Trees */}
             <g transform="translate(40, 45) scale(0.65)">
-              {/* Tree */}
               <circle cx="20" cy="20" r="18" fill="#2E6930" />
               <rect x="17" y="28" width="6" height="20" fill="#5D4037" />
             </g>
 
             <g transform="translate(180, 40) scale(0.7)">
-              {/* Hut */}
               <polygon points="30,10 5,35 55,35" fill="#C0392B" />
               <rect x="10" y="35" width="40" height="25" fill="#F5EFE0" stroke="#8D6E63" strokeWidth="1" />
               <rect x="25" y="42" width="10" height="18" fill="#5D4037" />
             </g>
 
             <g transform="translate(300, 30) scale(0.85)">
-              {/* Big Tree */}
               <circle cx="30" cy="25" r="24" fill="#1B4D21" />
               <rect x="26" y="35" width="8" height="30" fill="#4E342E" />
             </g>
           </svg>
 
-          {/* Title Overlay with Traditional Rural Aesthetic */}
-          <div className="absolute bottom-2 left-0 right-0 px-4 flex flex-col items-center text-center">
+          {/* Title Overlay */}
+          <div className="absolute bottom-3 left-0 right-0 px-4 flex flex-col items-center text-center">
             <div className="w-14 h-14 rounded-2xl overflow-hidden shadow-lg border-2 border-white/80 bg-[#FAF6ED] mb-1.5 flex items-center justify-center">
               <img src={melaLogo} alt="mela logo" className="w-full h-full object-cover" />
             </div>
-            <h1 className="text-xl font-black text-[#1E3A1E] tracking-tight drop-shadow-sm font-sans leading-tight">
-              mela • हुनर से बाज़ार तक
+            <h1 className="text-xl sm:text-2xl font-black text-[#1E3A1E] tracking-tight drop-shadow-sm font-sans leading-tight">
+              {t('ruralAppTitle')}
             </h1>
-            <p className="text-[11px] font-bold text-[#3D5C35] mt-0.5">
-              आपका सामान, अब पूरे देश के सामने
+            <p className="text-xs font-bold text-[#3D5C35] mt-0.5">
+              {t('ruralAppSubtitle')}
             </p>
           </div>
         </div>
@@ -97,16 +97,15 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
         <div className="px-5 py-6">
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-base font-bold text-[#3B3026] flex items-center gap-2">
-              <span>अपनी भाषा चुनें</span>
-              <span className="text-xs text-[#7D6E5D] font-normal">(Choose Language)</span>
+              <span>{t('chooseLanguage')}</span>
             </h2>
             <button 
               onClick={() => {
                 playSoundEffect('tap');
-                speakText('कृपया अपनी पसंद की भाषा चुनें');
+                speakText(activeLanguage === 'en' ? 'Please select your preferred language' : 'कृपया अपनी पसंद की भाषा चुनें');
               }}
               className="p-1.5 rounded-full bg-[#EADCC9]/60 hover:bg-[#EADCC9] text-[#5A4838] transition-colors"
-              title="बोलकर सुनें"
+              title="Listen"
             >
               <Volume2 className="w-4 h-4" />
             </button>
@@ -115,9 +114,9 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
           {/* Language Selection Tiles */}
           <div className="space-y-3">
             
-            {/* Hindi (Primary Active by default) */}
+            {/* Hindi */}
             <button
-              onClick={() => handleLangPick('hi', 'हिंदी')}
+              onClick={() => handleLangPick('hi')}
               className={`w-full flex items-center justify-between p-4 rounded-2xl border-2 transition-all text-left shadow-sm ${
                 selectedLanguage === 'hi'
                   ? 'bg-[#3A6B35] border-[#2C5528] text-white shadow-[#3A6B35]/20 shadow-md font-bold'
@@ -142,7 +141,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
 
             {/* English */}
             <button
-              onClick={() => handleLangPick('en', 'English')}
+              onClick={() => handleLangPick('en')}
               className={`w-full flex items-center justify-between p-4 rounded-2xl border-2 transition-all text-left shadow-sm ${
                 selectedLanguage === 'en'
                   ? 'bg-[#3A6B35] border-[#2C5528] text-white shadow-[#3A6B35]/20 shadow-md font-bold'
@@ -165,7 +164,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
               )}
             </button>
 
-            {/* Other Indian Languages Collapsible / Modal */}
+            {/* Other Indian Languages Collapsible */}
             <div className="pt-1">
               <button
                 onClick={() => {
@@ -182,22 +181,24 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
                   <Globe className="w-5 h-5 text-[#3A6B35]" />
                   <span className="text-base font-semibold text-[#3B3026]">
                     {selectedLanguage !== 'hi' && selectedLanguage !== 'en'
-                      ? otherLanguages.find(l => l.code === selectedLanguage)?.name || 'अन्य भाषा'
-                      : 'अन्य भाषा (Other Regional Languages)'}
+                      ? otherLanguages.find(l => l.code === selectedLanguage)?.name || 'Other'
+                      : (activeLanguage === 'en' ? 'Other Regional Languages' : 'अन्य भाषा (Other Regional Languages)')}
                   </span>
                 </div>
                 <span className="text-xs font-bold text-[#3A6B35]">
-                  {showOtherLangs ? 'बंद करें ▲' : 'खोलें ▼'}
+                  {showOtherLangs 
+                    ? (activeLanguage === 'en' ? 'Close ▲' : 'बंद करें ▲') 
+                    : (activeLanguage === 'en' ? 'Open ▼' : 'खोलें ▼')}
                 </span>
               </button>
 
               {showOtherLangs && (
-                <div className="grid grid-cols-2 gap-2 mt-2 p-3 bg-white rounded-2xl border border-[#E5DAC8] shadow-inner animate-in fade-in duration-200">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-2 p-3 bg-white rounded-2xl border border-[#E5DAC8] shadow-inner animate-in fade-in duration-200">
                   {otherLanguages.map(lang => (
                     <button
                       key={lang.code}
                       onClick={() => {
-                        handleLangPick(lang.code, lang.name);
+                        handleLangPick(lang.code);
                         setShowOtherLangs(false);
                       }}
                       className={`p-2.5 rounded-xl text-center font-bold text-sm transition-colors border ${
@@ -226,11 +227,11 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
           }}
           className="w-full py-4 px-6 rounded-2xl bg-[#3A6B35] hover:bg-[#2F582B] active:scale-[0.98] text-white font-extrabold text-lg flex items-center justify-center gap-3 shadow-lg shadow-[#3A6B35]/30 transition-all"
         >
-          <span>आगे बढ़ें</span>
+          <span>{t('proceed')}</span>
           <ArrowRight className="w-5 h-5 stroke-[2.5]" />
         </button>
-        <p className="text-center text-[11px] text-[#8A7B6E] font-medium mt-2">
-          सरल • सुरक्षित • सीधे आपके बैंक खाते में कमाई
+        <p className="text-center text-xs text-[#8A7B6E] font-medium mt-2">
+          {t('simpleSecureDirect')}
         </p>
       </div>
 

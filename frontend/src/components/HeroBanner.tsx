@@ -28,17 +28,17 @@ export const HeroBanner: React.FC = () => {
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-amber-400/30 text-amber-300 text-xs font-bold uppercase tracking-wider">
             <Sparkles className="w-3.5 h-3.5 animate-spin-slow text-amber-300" />
-            <span>Smart India Hackathon • SIH Mela Edition</span>
+            <span>{t('sihBadge')}</span>
           </div>
 
           {/* Heading */}
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-serif font-bold tracking-tight leading-[1.15]">
-            Bridging <span className="text-amber-400 italic">Ancient Heritage</span> with <span className="bg-gradient-to-r from-orange-400 to-amber-200 bg-clip-text text-transparent">Gemini AI</span>
+            {t('heroHeadingPart1')} <span className="text-amber-400 italic">{t('heroHeadingPart2')}</span> {t('heroHeadingPart3')} <span className="bg-gradient-to-r from-orange-400 to-amber-200 bg-clip-text text-transparent">{t('heroHeadingPart4')}</span>
           </h1>
 
           {/* Subheading */}
           <p className="text-base sm:text-lg text-slate-200 font-normal leading-relaxed max-w-xl">
-            Empowering rural master craftsmen and women to photograph their handcrafted treasures. Our multimodal AI instantly generates GI-verified titles, fair pricing, and evocative stories across <strong>8 Indian languages</strong>.
+            {t('heroSubtitle')}
           </p>
 
           {/* CTAs */}
@@ -51,7 +51,7 @@ export const HeroBanner: React.FC = () => {
               className="group relative inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-[#2C5E43] to-[#3A6B35] text-white font-black text-sm sm:text-base shadow-xl shadow-emerald-950/40 border-2 border-[#8AC172] hover:scale-105 hover:shadow-2xl transition-all duration-200"
             >
               <span className="text-xl">🌾</span>
-              <span>ग्रामीण कारीगर ऐप खोलें (Mobile App)</span>
+              <span>{t('openRuralApp')}</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
 
@@ -63,7 +63,7 @@ export const HeroBanner: React.FC = () => {
               className="group relative inline-flex items-center gap-2.5 px-5 py-3.5 rounded-2xl bg-gradient-to-r from-artisan-terracotta to-artisan-saffron-gold text-white font-bold text-sm sm:text-base shadow-xl shadow-artisan-terracotta/40 hover:scale-105 transition-all duration-200"
             >
               <Sparkles className="w-5 h-5 text-amber-200" />
-              <span>AI Vision Studio</span>
+              <span>{t('aiStudioNav')}</span>
             </button>
 
             <button
@@ -74,7 +74,7 @@ export const HeroBanner: React.FC = () => {
               className="inline-flex items-center gap-2 px-4 py-3.5 rounded-2xl bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-semibold text-sm border border-white/20 transition-all"
             >
               <Flame className="w-4 h-4 text-amber-400" />
-              <span>Explore Crafts</span>
+              <span>{t('exploreCrafts')}</span>
             </button>
           </div>
 
@@ -82,15 +82,15 @@ export const HeroBanner: React.FC = () => {
           <div className="pt-4 border-t border-white/10 flex flex-wrap items-center justify-center lg:justify-start gap-6 text-xs text-slate-300">
             <div className="flex items-center gap-1.5">
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
-              <span>100% GI Authentic Guaranteed</span>
+              <span>{t('giAuthentic')}</span>
             </div>
             <div className="flex items-center gap-1.5">
               <HeartHandshake className="w-4 h-4 text-amber-400" />
-              <span>Direct Fair-Wage Guarantee (80%+ to Artisan)</span>
+              <span>{t('fairWageGuarantee')}</span>
             </div>
             <div className="flex items-center gap-1.5">
               <Award className="w-4 h-4 text-orange-400" />
-              <span>National Awardee Master Crafts</span>
+              <span>{t('nationalAwardCrafts')}</span>
             </div>
           </div>
         </div>

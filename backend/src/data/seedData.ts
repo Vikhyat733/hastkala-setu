@@ -50,6 +50,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     originRegion: 'Jaipur',
     giTagStatus: {
       hasGiTag: true,
+      verificationStatus: 'verified',
       giTagNumber: 'GI-244',
       registeredName: 'Blue Pottery of Jaipur'
     },
@@ -67,6 +68,10 @@ export const INITIAL_PRODUCTS: Product[] = [
       hourlyFairWageRate: 85,
       fairLaborCost: 1360,
       packagingAndLogistics: 110,
+      fairMargin: 200,
+      marketRangeMin: 1600,
+      marketRangeMax: 2400,
+      estimationBasis: 'reference_data',
       suggestedPrice: 1850,
       minPrice: 1600,
       artisanDirectSharePercent: 82

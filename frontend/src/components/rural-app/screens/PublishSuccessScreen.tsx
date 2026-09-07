@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
-import { Check, Sparkles, Plus, Eye, Share2, Volume2 } from 'lucide-react';
+import { Check, Plus, Eye } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { speakText, playSoundEffect } from '../../../services/voiceAssistant';
+import { useMarketplace } from '../../../context/MarketplaceContext';
 
 interface PublishSuccessScreenProps {
   image: string;
@@ -18,8 +19,9 @@ export const PublishSuccessScreen: React.FC<PublishSuccessScreenProps> = ({
   onViewMyItems,
   onAddNewCraft
 }) => {
+  const { t, activeLanguage } = useMarketplace();
+
   useEffect(() => {
-    // Trigger festive confetti
     try {
       confetti({
         particleCount: 100,
@@ -32,11 +34,15 @@ export const PublishSuccessScreen: React.FC<PublishSuccessScreenProps> = ({
     }
 
     playSoundEffect('celebrate');
-    speakText(`बधाई हो! आपका सामान ${name} सफलतापूर्वक बाज़ार में प्रकाशित हो गया है।`);
-  }, [name]);
+    if (activeLanguage === 'en') {
+      speakText(`Congratulations! Your craft ${name} has been successfully published to the live marketplace.`);
+    } else {
+      speakText(`बधाई हो! आपका सामान ${name} सफलतापूर्वक बाज़ार में प्रकाशित हो गया है।`);
+    }
+  }, [name, activeLanguage]);
 
   return (
-    <div className="min-h-full flex flex-col justify-between bg-[#FAF6ED] text-[#2C241E] select-none p-5 text-center">
+    <div className="min-h-full flex flex-col justify-between bg-[#FAF6ED] text-[#2C241E] select-none p-5 text-center max-w-xl mx-auto w-full">
       
       {/* Top Confetti Decor */}
       <div className="pt-2">
@@ -61,23 +67,23 @@ export const PublishSuccessScreen: React.FC<PublishSuccessScreenProps> = ({
 
         {/* Title */}
         <h1 className="text-2xl sm:text-3xl font-black text-[#1E3A1E] font-sans tracking-tight">
-          बधाई हो!
+          {t('congratulations')}
         </h1>
 
-        <p className="text-sm font-bold text-[#4E6C47] mt-1 max-w-[260px]">
-          आपका सामान सफलतापूर्वक प्रकाशित हो गया है
+        <p className="text-sm font-bold text-[#4E6C47] mt-1 max-w-[280px]">
+          {t('itemPublishedSuccess')}
         </p>
 
         {/* Published Craft Preview Card */}
-        <div className="mt-5 p-3.5 rounded-3xl bg-white border-2 border-[#D7E8CC] shadow-md w-full max-w-[280px] flex items-center gap-3.5 text-left">
+        <div className="mt-5 p-3.5 rounded-3xl bg-white border-2 border-[#D7E8CC] shadow-md w-full max-w-[320px] flex items-center gap-3.5 text-left">
           <img
             src={image}
             alt={name}
             className="w-16 h-16 rounded-2xl object-cover border border-[#E5DAC8] shadow-sm flex-shrink-0"
           />
           <div className="flex-1 min-w-0">
-            <span className="inline-block text-[9px] font-black px-2 py-0.5 rounded-md bg-[#E8F0E3] text-[#3A6B35] mb-1">
-              ✓ लाइव बाज़ार में उपलब्ध
+            <span className="inline-block text-[10px] font-black px-2 py-0.5 rounded-md bg-[#E8F0E3] text-[#3A6B35] mb-1">
+              {t('liveInMarketplace')}
             </span>
             <h3 className="font-extrabold text-[#1E3A1E] text-sm truncate">
               {name}
@@ -91,9 +97,9 @@ export const PublishSuccessScreen: React.FC<PublishSuccessScreenProps> = ({
       </div>
 
       {/* 2 Primary Action Buttons */}
-      <div className="space-y-3 pt-2">
+      <div className="space-y-3 pt-4 w-full max-w-md mx-auto">
         
-        {/* Button 1: मेरा सामान देखें (View My Items) */}
+        {/* Button 1: View My Items */}
         <button
           onClick={() => {
             playSoundEffect('tap');
@@ -102,10 +108,10 @@ export const PublishSuccessScreen: React.FC<PublishSuccessScreenProps> = ({
           className="w-full py-4 px-6 rounded-2xl bg-[#3A6B35] hover:bg-[#2F582B] active:scale-[0.98] text-white font-extrabold text-base flex items-center justify-center gap-2.5 shadow-lg shadow-[#3A6B35]/30 transition-all"
         >
           <Eye className="w-5 h-5 stroke-[2.5]" />
-          <span>मेरा सामान देखें</span>
+          <span>{t('viewMyItems')}</span>
         </button>
 
-        {/* Button 2: एक और सामान जोड़ें (Add Another Item) */}
+        {/* Button 2: Add Another Item */}
         <button
           onClick={() => {
             playSoundEffect('tap');
@@ -114,7 +120,7 @@ export const PublishSuccessScreen: React.FC<PublishSuccessScreenProps> = ({
           className="w-full py-3.5 px-6 rounded-2xl bg-white border-2 border-[#E5DAC8] hover:bg-[#F4EDE0] active:scale-[0.98] text-[#3B3026] font-extrabold text-sm flex items-center justify-center gap-2 shadow-sm transition-all"
         >
           <Plus className="w-4 h-4 stroke-[3] text-[#3A6B35]" />
-          <span>एक और सामान जोड़ें</span>
+          <span>{t('addAnotherItem')}</span>
         </button>
 
       </div>

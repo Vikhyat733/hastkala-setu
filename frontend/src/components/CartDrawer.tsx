@@ -74,7 +74,7 @@ export const CartDrawer: React.FC = () => {
                 {t('cartTitle')}
               </h3>
               <p className="text-[11px] text-artisan-slate/70">
-                {cart.length} unique handcrafted items
+                {cart.length} {t('uniqueItems')}
               </p>
             </div>
           </div>
@@ -102,7 +102,7 @@ export const CartDrawer: React.FC = () => {
                 onClick={() => setIsCartOpen(false)}
                 className="px-5 py-2.5 rounded-xl bg-artisan-terracotta text-white font-bold text-xs"
               >
-                Browse Marketplace
+                {t('browseMarketplace')}
               </button>
             </div>
           ) : (
@@ -199,7 +199,7 @@ export const CartDrawer: React.FC = () => {
                           : 'bg-white text-artisan-indigo border-amber-300/40 hover:bg-amber-100/50'
                       }`}
                     >
-                      {amt === 0 ? 'No Tip' : `₹${amt}`}
+                      {amt === 0 ? t('noTip') : `₹${amt}`}
                     </button>
                   ))}
                 </div>
@@ -222,7 +222,7 @@ export const CartDrawer: React.FC = () => {
                     type="submit"
                     className="px-3.5 py-2 rounded-xl bg-artisan-indigo text-white font-bold text-xs hover:bg-artisan-indigo-dark transition-all"
                   >
-                    Apply
+                    {t('apply')}
                   </button>
                 </div>
                 {couponApplied && (
@@ -245,25 +245,25 @@ export const CartDrawer: React.FC = () => {
           <div className="p-4 sm:p-5 border-t border-artisan-terracotta/15 bg-white space-y-3">
             <div className="space-y-1.5 text-xs text-artisan-slate/80">
               <div className="flex justify-between">
-                <span>Crafts Subtotal</span>
+                <span>{t('craftsSubtotal')}</span>
                 <span className="font-bold text-artisan-indigo">{formatPrice(subtotal)}</span>
               </div>
               {artisanTip > 0 && (
                 <div className="flex justify-between text-amber-700 font-medium">
-                  <span>Artisan Direct Tip</span>
+                  <span>{t('artisanDirectTip')}</span>
                   <span>+{formatPrice(artisanTip)}</span>
                 </div>
               )}
               {discountAmount > 0 && (
                 <div className="flex justify-between text-emerald-700 font-medium">
-                  <span>Discount</span>
+                  <span>{t('discount')}</span>
                   <span>-{formatPrice(discountAmount)}</span>
                 </div>
               )}
               <div className="flex justify-between">
-                <span>Insured Eco Shipping</span>
+                <span>{t('insuredShipping')}</span>
                 <span className="font-bold text-artisan-indigo">
-                  {deliveryFee === 0 ? <span className="text-emerald-700 font-bold">FREE</span> : formatPrice(deliveryFee)}
+                  {deliveryFee === 0 ? <span className="text-emerald-700 font-bold">{t('freeShipping')}</span> : formatPrice(deliveryFee)}
                 </span>
               </div>
 

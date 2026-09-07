@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { ArrowLeft, Camera, Image as ImageIcon, Mic, Volume2, Sparkles, MicOff } from 'lucide-react';
 import { speakText, playSoundEffect } from '../../../services/voiceAssistant';
+import { useMarketplace } from '../../../context/MarketplaceContext';
 
 interface AddChoiceScreenProps {
   onBack: () => void;
@@ -15,13 +16,18 @@ export const AddChoiceScreen: React.FC<AddChoiceScreenProps> = ({
   onSelectGallery,
   onSelectVoice
 }) => {
+  const { t, activeLanguage } = useMarketplace();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isRecording, setIsRecording] = useState(false);
   const [spokenText, setSpokenText] = useState('');
 
   const handleVoiceListen = () => {
     playSoundEffect('tap');
-    speakText('नया सामान कैसे जोड़ना चाहेंगे? पहला विकल्प: कैमरा से फोटो लें। दूसरा: गैलरी से फोटो चुनें। तीसरा: बोलकर बताएं।');
+    if (activeLanguage === 'en') {
+      speakText('How would you like to add your craft? First option: Take photo with camera. Second: Choose photo from gallery. Third: Describe by speaking.');
+    } else {
+      speakText('नया सामान कैसे जोड़ना चाहेंगे? पहला विकल्प: कैमरा से फोटो लें। दूसरा: गैलरी से फोटो चुनें। तीसरा: बोलकर बताएं।');
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,12 +46,13 @@ export const AddChoiceScreen: React.FC<AddChoiceScreenProps> = ({
       (window as unknown as { webkitSpeechRecognition?: any }).webkitSpeechRecognition;
 
     if (!SpeechRecognitionClass) {
-      // Simulate with standard prompt
       setIsRecording(true);
-      speakText('कृपया अपने सामान के बारे में बोलें...');
+      speakText(activeLanguage === 'en' ? 'Please describe your craft...' : 'कृपया अपने सामान के बारे में बोलें...');
       setTimeout(() => {
         setIsRecording(false);
-        const sampleSpoken = 'यह हाथ से बनी बाँस की टोकरी है, बहुत मजबूत और सुंदर है।';
+        const sampleSpoken = activeLanguage === 'en' 
+          ? 'Handcrafted bamboo basket, very sturdy and attractive home decor item.'
+          : 'यह हाथ से बनी बाँस की टोकरी है, बहुत मजबूत और सुंदर है।';
         setSpokenText(sampleSpoken);
         onSelectVoice(sampleSpoken);
       }, 3000);
@@ -54,12 +61,12 @@ export const AddChoiceScreen: React.FC<AddChoiceScreenProps> = ({
 
     try {
       const recognition = new SpeechRecognitionClass();
-      recognition.lang = 'hi-IN';
+      recognition.lang = activeLanguage === 'en' ? 'en-IN' : 'hi-IN';
       recognition.interimResults = false;
       recognition.maxAlternatives = 1;
 
       setIsRecording(true);
-      speakText('अपने सामान का नाम और विवरण बोलें...');
+      speakText(activeLanguage === 'en' ? 'Please say the name and description of your craft...' : 'अपने सामान का नाम और विवरण बोलें...');
 
       recognition.onresult = (event: any) => {
         const transcript = event.results[0][0].transcript;
@@ -71,8 +78,7 @@ export const AddChoiceScreen: React.FC<AddChoiceScreenProps> = ({
 
       recognition.onerror = () => {
         setIsRecording(false);
-        // Fallback demo text
-        onSelectVoice('हाथ से बनाई गई पारंपरिक सुंदर कलाकृति');
+        onSelectVoice(activeLanguage === 'en' ? 'Traditional handcrafted masterpiece' : 'हाथ से बनाई गई पारंपरिक सुंदर कलाकृति');
       };
 
       recognition.onend = () => {
@@ -82,12 +88,12 @@ export const AddChoiceScreen: React.FC<AddChoiceScreenProps> = ({
       recognition.start();
     } catch (err) {
       setIsRecording(false);
-      onSelectVoice('बाँस की हस्तनिर्मित टोकरी');
+      onSelectVoice(activeLanguage === 'en' ? 'Handcrafted bamboo basket' : 'बाँस की हस्तनिर्मित टोकरी');
     }
   };
 
   return (
-    <div className="min-h-full flex flex-col justify-between bg-[#FAF6ED] text-[#2C241E] select-none p-4 sm:p-5">
+    <div className="min-h-full flex flex-col justify-between bg-[#FAF6ED] text-[#2C241E] select-none p-4 sm:p-6 w-full">
       
       {/* Hidden File Input for Gallery */}
       <input
@@ -98,7 +104,7 @@ export const AddChoiceScreen: React.FC<AddChoiceScreenProps> = ({
         className="hidden"
       />
 
-      <div className="space-y-4">
+      <div className="space-y-6">
         
         {/* Top Navigation Header */}
         <div className="flex items-center justify-between pt-1">
@@ -112,14 +118,14 @@ export const AddChoiceScreen: React.FC<AddChoiceScreenProps> = ({
             <ArrowLeft className="w-5 h-5 stroke-[2.5]" />
           </button>
 
-          <h1 className="text-lg font-black text-[#1E3A1E] font-sans">
-            नया सामान जोड़ें
+          <h1 className="text-xl font-black text-[#1E3A1E] font-sans">
+            {t('addNewItemTitle')}
           </h1>
 
           <button
             onClick={handleVoiceListen}
             className="p-2.5 rounded-2xl bg-[#E8F0E3] border border-[#3A6B35]/30 text-[#3A6B35] shadow-sm hover:bg-[#DCEAD5]"
-            title="निर्देश सुनें"
+            title="Listen"
           >
             <Volume2 className="w-5 h-5" />
           </button>
@@ -128,62 +134,62 @@ export const AddChoiceScreen: React.FC<AddChoiceScreenProps> = ({
         {/* Section Heading */}
         <div className="pt-2 text-center">
           <h2 className="text-xl sm:text-2xl font-black text-[#2A4424]">
-            कैसे जोड़ना चाहेंगे?
+            {t('howToAdd')}
           </h2>
-          <p className="text-xs font-bold text-[#7D6E5D] mt-0.5">
-            नीचे दिए गए 3 विकल्पों में से एक चुनें
+          <p className="text-xs sm:text-sm font-bold text-[#7D6E5D] mt-1">
+            {t('chooseOneOption')}
           </p>
         </div>
 
-        {/* 3 LARGE TOUCH CHOICE TILES */}
-        <div className="space-y-3.5 pt-2">
+        {/* 3 LARGE TOUCH CHOICE TILES — Responsive Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
           
-          {/* OPTION 1: 📷 फोटो लें (Take Photo) */}
+          {/* OPTION 1: 📷 Camera */}
           <button
             onClick={() => {
               playSoundEffect('tap');
               onSelectCamera();
             }}
-            className="w-full p-4 sm:p-5 rounded-3xl bg-[#EEF6EB] border-2 border-[#BCD8B3] hover:border-[#3A6B35] text-left shadow-sm hover:shadow-md transition-all flex items-center gap-4 group active:scale-[0.98]"
+            className="w-full p-5 sm:p-6 rounded-3xl bg-[#EEF6EB] border-2 border-[#BCD8B3] hover:border-[#3A6B35] text-left shadow-sm hover:shadow-md transition-all flex md:flex-col items-center md:items-start gap-4 group active:scale-[0.98]"
           >
             <div className="w-14 h-14 rounded-2xl bg-[#3A6B35] text-white flex items-center justify-center shadow-md group-hover:scale-105 transition-transform flex-shrink-0">
               <Camera className="w-7 h-7 stroke-[2.2]" />
             </div>
             <div>
               <h3 className="text-lg sm:text-xl font-black text-[#1E3A1E] leading-tight">
-                फोटो लें
+                {t('takePhoto')}
               </h3>
-              <p className="text-xs sm:text-sm font-bold text-[#4E6C47] mt-0.5">
-                अभी कैमरे से फोटो लें
+              <p className="text-xs sm:text-sm font-bold text-[#4E6C47] mt-1">
+                {t('takePhotoNow')}
               </p>
             </div>
           </button>
 
-          {/* OPTION 2: 🖼️ गैलरी से चुनें (Choose from Gallery) */}
+          {/* OPTION 2: 🖼️ Gallery */}
           <button
             onClick={() => {
               playSoundEffect('tap');
               fileInputRef.current?.click();
             }}
-            className="w-full p-4 sm:p-5 rounded-3xl bg-[#FEF6E8] border-2 border-[#F5DCB0] hover:border-[#E67E22] text-left shadow-sm hover:shadow-md transition-all flex items-center gap-4 group active:scale-[0.98]"
+            className="w-full p-5 sm:p-6 rounded-3xl bg-[#FEF6E8] border-2 border-[#F5DCB0] hover:border-[#E67E22] text-left shadow-sm hover:shadow-md transition-all flex md:flex-col items-center md:items-start gap-4 group active:scale-[0.98]"
           >
             <div className="w-14 h-14 rounded-2xl bg-[#E67E22] text-white flex items-center justify-center shadow-md group-hover:scale-105 transition-transform flex-shrink-0">
               <ImageIcon className="w-7 h-7 stroke-[2.2]" />
             </div>
             <div>
               <h3 className="text-lg sm:text-xl font-black text-[#5C330B] leading-tight">
-                गैलरी से चुनें
+                {t('chooseFromGallery')}
               </h3>
-              <p className="text-xs sm:text-sm font-bold text-[#8C5D2C] mt-0.5">
-                फोन में पहले से मौजूद फोटो चुनें
+              <p className="text-xs sm:text-sm font-bold text-[#8C5D2C] mt-1">
+                {t('chooseExistingPhoto')}
               </p>
             </div>
           </button>
 
-          {/* OPTION 3: 🎤 बोलकर बताएं (Speak to Tell) */}
+          {/* OPTION 3: 🎤 Voice Input */}
           <button
             onClick={startVoiceInput}
-            className={`w-full p-4 sm:p-5 rounded-3xl border-2 text-left shadow-sm hover:shadow-md transition-all flex items-center gap-4 group active:scale-[0.98] ${
+            className={`w-full p-5 sm:p-6 rounded-3xl border-2 text-left shadow-sm hover:shadow-md transition-all flex md:flex-col items-center md:items-start gap-4 group active:scale-[0.98] ${
               isRecording
                 ? 'bg-[#FBE9E7] border-[#D95D39] animate-pulse'
                 : 'bg-[#F4EEF9] border-[#D8C4E8] hover:border-[#7B4BA4]'
@@ -198,12 +204,12 @@ export const AddChoiceScreen: React.FC<AddChoiceScreenProps> = ({
               <h3 className={`text-lg sm:text-xl font-black leading-tight ${
                 isRecording ? 'text-[#D95D39]' : 'text-[#3E215C]'
               }`}>
-                {isRecording ? 'सुन रहा है... बोलिए' : 'बोलकर बताएं'}
+                {isRecording ? t('listening') : t('speakToTell')}
               </h3>
-              <p className={`text-xs sm:text-sm font-bold mt-0.5 ${
+              <p className={`text-xs sm:text-sm font-bold mt-1 ${
                 isRecording ? 'text-[#B54424]' : 'text-[#6C4B88]'
               }`}>
-                {isRecording ? 'सामान का नाम और विवरण बोलें' : 'सामान के बारे में बोलें'}
+                {isRecording ? t('speakItemDetails') : t('speakAboutItem')}
               </p>
             </div>
           </button>
@@ -218,10 +224,10 @@ export const AddChoiceScreen: React.FC<AddChoiceScreenProps> = ({
         </div>
         <div>
           <h4 className="text-xs font-black text-[#2A4424]">
-            AI आपकी पूरी मदद करेगा
+            {t('aiWillHelp')}
           </h4>
-          <p className="text-[11px] font-semibold text-[#6D5D4E] mt-0.5 leading-snug">
-            AI आपके फोटो और जानकारी से सामान का नाम, विवरण और सही कीमत अपने आप बनाएगा।
+          <p className="text-[11px] sm:text-xs font-semibold text-[#6D5D4E] mt-0.5 leading-snug">
+            {t('aiWillHelpDesc')}
           </p>
         </div>
       </div>

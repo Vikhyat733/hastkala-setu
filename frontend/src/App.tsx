@@ -14,14 +14,7 @@ import { MyOrdersView } from './components/MyOrdersView';
 import { Footer } from './components/Footer';
 import { Toast } from './components/Toast';
 import { RuralArtisanApp } from './components/rural-app/RuralArtisanApp';
-import { 
-  Sparkles, 
-  ShoppingBag, 
-  Compass, 
-  Store, 
-  BookOpen,
-  Smartphone
-} from 'lucide-react';
+
 
 const MarketplaceContent: React.FC = () => {
   const { currentView, setCurrentView, products, cart, setIsCartOpen } = useMarketplace();
@@ -81,6 +74,7 @@ const MarketplaceContent: React.FC = () => {
 
             {currentView === 'ai-studio' && <AIVisionStudio />}
             {currentView === 'artisan-dashboard' && <ArtisanDashboard />}
+            {currentView === 'b2b-linkage' && <ArtisanDashboard />}
             {currentView === 'artisan-stories' && <ArtisanStories />}
             {currentView === 'my-orders' && <MyOrdersView />}
           </main>

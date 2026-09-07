@@ -63,6 +63,7 @@ export const SAMPLE_CRAFTS: Product[] = [
     originRegion: 'Jaipur',
     giTagStatus: {
       hasGiTag: true,
+      verificationStatus: 'verified',
       giTagNumber: 'GI-244',
       registeredName: 'Blue Pottery of Jaipur'
     },
@@ -99,6 +100,10 @@ export const SAMPLE_CRAFTS: Product[] = [
       hourlyFairWageRate: 85,
       fairLaborCost: 1360,
       packagingAndLogistics: 110,
+      fairMargin: 200,
+      marketRangeMin: 1600,
+      marketRangeMax: 2400,
+      estimationBasis: 'reference_data',
       suggestedPrice: 1850,
       minPrice: 1600,
       artisanDirectSharePercent: 82
@@ -172,6 +177,7 @@ export const SAMPLE_CRAFTS: Product[] = [
     originRegion: 'Bastar',
     giTagStatus: {
       hasGiTag: true,
+      verificationStatus: 'verified',
       giTagNumber: 'GI-83',
       registeredName: 'Bastar Dhokra'
     },
@@ -200,6 +206,10 @@ export const SAMPLE_CRAFTS: Product[] = [
       hourlyFairWageRate: 90,
       fairLaborCost: 2160,
       packagingAndLogistics: 180,
+      fairMargin: 350,
+      marketRangeMin: 2900,
+      marketRangeMax: 4200,
+      estimationBasis: 'reference_data',
       suggestedPrice: 3200,
       minPrice: 2900,
       artisanDirectSharePercent: 85
@@ -273,6 +283,7 @@ export const SAMPLE_CRAFTS: Product[] = [
     originRegion: 'Madhubani',
     giTagStatus: {
       hasGiTag: true,
+      verificationStatus: 'verified',
       giTagNumber: 'GI-145',
       registeredName: 'Madhubani Paintings of Bihar'
     },
@@ -301,6 +312,10 @@ export const SAMPLE_CRAFTS: Product[] = [
       hourlyFairWageRate: 100,
       fairLaborCost: 1800,
       packagingAndLogistics: 150,
+      fairMargin: 300,
+      marketRangeMin: 2200,
+      marketRangeMax: 3500,
+      estimationBasis: 'reference_data',
       suggestedPrice: 2450,
       minPrice: 2200,
       artisanDirectSharePercent: 88
@@ -374,6 +389,7 @@ export const SAMPLE_CRAFTS: Product[] = [
     originRegion: 'Channapatna',
     giTagStatus: {
       hasGiTag: true,
+      verificationStatus: 'verified',
       giTagNumber: 'GI-21',
       registeredName: 'Channapatna Toys and Dolls'
     },
@@ -402,6 +418,10 @@ export const SAMPLE_CRAFTS: Product[] = [
       hourlyFairWageRate: 95,
       fairLaborCost: 665,
       packagingAndLogistics: 90,
+      fairMargin: 175,
+      marketRangeMin: 990,
+      marketRangeMax: 1600,
+      estimationBasis: 'reference_data',
       suggestedPrice: 1150,
       minPrice: 990,
       artisanDirectSharePercent: 84
@@ -475,6 +495,7 @@ export const SAMPLE_CRAFTS: Product[] = [
     originRegion: 'Kutch',
     giTagStatus: {
       hasGiTag: true,
+      verificationStatus: 'verified',
       giTagNumber: 'GI-389',
       registeredName: 'Kutch Rogan Craft'
     },
@@ -503,6 +524,10 @@ export const SAMPLE_CRAFTS: Product[] = [
       hourlyFairWageRate: 105,
       fairLaborCost: 3360,
       packagingAndLogistics: 190,
+      fairMargin: 450,
+      marketRangeMin: 4400,
+      marketRangeMax: 6500,
+      estimationBasis: 'reference_data',
       suggestedPrice: 4800,
       minPrice: 4400,
       artisanDirectSharePercent: 89
@@ -576,6 +601,7 @@ export const SAMPLE_CRAFTS: Product[] = [
     originRegion: 'Bankura',
     giTagStatus: {
       hasGiTag: true,
+      verificationStatus: 'verified',
       giTagNumber: 'GI-85',
       registeredName: 'Bankura Terracotta Craft'
     },
@@ -604,6 +630,10 @@ export const SAMPLE_CRAFTS: Product[] = [
       hourlyFairWageRate: 85,
       fairLaborCost: 1020,
       packagingAndLogistics: 120,
+      fairMargin: 180,
+      marketRangeMin: 1250,
+      marketRangeMax: 2000,
+      estimationBasis: 'reference_data',
       suggestedPrice: 1450,
       minPrice: 1250,
       artisanDirectSharePercent: 86

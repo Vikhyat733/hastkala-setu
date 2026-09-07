@@ -3,7 +3,7 @@ import { useMarketplace } from '../context/MarketplaceContext';
 import { PackageCheck, Truck, Clock, CheckCircle2, ArrowLeft, Printer } from 'lucide-react';
 
 export const MyOrdersView: React.FC = () => {
-  const { recentOrders, formatPrice, setCurrentView } = useMarketplace();
+  const { recentOrders, formatPrice, setCurrentView, activeLanguage, t } = useMarketplace();
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-in fade-in duration-300">
@@ -18,10 +18,10 @@ export const MyOrdersView: React.FC = () => {
           </button>
           <div>
             <h2 className="font-serif font-bold text-2xl text-artisan-indigo">
-              My Orders & Receipts
+              {t('myOrdersTitle')}
             </h2>
             <p className="text-xs text-artisan-slate/70">
-              Track your handcrafted heritage deliveries and artisan guild contributions
+              {t('myOrdersSubtitle')}
             </p>
           </div>
         </div>
@@ -33,16 +33,16 @@ export const MyOrdersView: React.FC = () => {
             <PackageCheck className="w-8 h-8" />
           </div>
           <h3 className="font-serif font-bold text-lg text-artisan-indigo">
-            No Orders Placed Yet
+            {t('noOrdersYet')}
           </h3>
           <p className="text-xs text-artisan-slate/70 max-w-sm mx-auto">
-            Your craft purchases directly fund the livelihood of rural master artisans across 28 states.
+            {t('noOrdersSubtitle')}
           </p>
           <button
             onClick={() => setCurrentView('marketplace')}
             className="px-5 py-2.5 rounded-xl bg-artisan-terracotta text-white font-bold text-xs"
           >
-            Explore Handicrafts
+            {t('exploreHandicrafts')}
           </button>
         </div>
       ) : (
@@ -58,14 +58,14 @@ export const MyOrdersView: React.FC = () => {
                     {order.id}
                   </span>
                   <p className="text-[11px] text-artisan-slate/60">
-                    Placed on {new Date(order.orderDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                    {new Date(order.orderDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
                   </p>
                 </div>
 
                 <div className="flex items-center gap-3">
                   <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold">
                     <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                    <span>Dispatched via Postal Guild</span>
+                    <span>{t('dispatchedPostal')}</span>
                   </span>
                   <span className="font-black text-base text-artisan-indigo">
                     {formatPrice(order.total)}
@@ -84,7 +84,7 @@ export const MyOrdersView: React.FC = () => {
                         className="w-10 h-10 rounded-lg object-cover border border-artisan-terracotta/15"
                       />
                       <div>
-                        <p className="font-bold text-artisan-indigo">{item.product.title.en}</p>
+                        <p className="font-bold text-artisan-indigo">{item.product.title[activeLanguage] || item.product.title.en}</p>
                         <p className="text-[10px] text-artisan-slate/60">Qty: {item.quantity} • By {item.product.artisan.name}</p>
                       </div>
                     </div>
@@ -96,7 +96,7 @@ export const MyOrdersView: React.FC = () => {
               <div className="pt-3 border-t border-artisan-terracotta/10 flex flex-wrap items-center justify-between gap-2 text-xs text-artisan-slate/80">
                 <div className="flex items-center gap-2">
                   <Truck className="w-4 h-4 text-artisan-terracotta" />
-                  <span>Tracking: <strong className="font-mono text-artisan-indigo">{order.trackingNumber}</strong></span>
+                  <span>{t('trackingCode')} <strong className="font-mono text-artisan-indigo">{order.trackingNumber}</strong></span>
                 </div>
 
                 <button
@@ -104,7 +104,7 @@ export const MyOrdersView: React.FC = () => {
                   className="flex items-center gap-1.5 text-xs font-bold text-artisan-indigo hover:text-artisan-terracotta"
                 >
                   <Printer className="w-3.5 h-3.5" />
-                  <span>Print Receipt</span>
+                  <span>{t('printInvoice')}</span>
                 </button>
               </div>
             </div>

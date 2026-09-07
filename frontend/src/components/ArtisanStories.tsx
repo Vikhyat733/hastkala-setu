@@ -4,7 +4,7 @@ import { SAMPLE_CRAFTS } from '../data/sampleCrafts';
 import { Award, ShieldCheck, Heart, ArrowRight } from 'lucide-react';
 
 export const ArtisanStories: React.FC = () => {
-  const { setSelectedProductForModal, setCurrentView, activeLanguage } = useMarketplace();
+  const { setSelectedProductForModal, setCurrentView, activeLanguage, t } = useMarketplace();
 
   // Extract unique artisans
   const artisans = SAMPLE_CRAFTS.map((c) => ({
@@ -19,13 +19,13 @@ export const ArtisanStories: React.FC = () => {
       <div className="text-center max-w-3xl mx-auto space-y-3">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-artisan-terracotta/10 text-artisan-terracotta text-xs font-bold uppercase tracking-wider">
           <Award className="w-3.5 h-3.5" />
-          <span>Heritage Guardians</span>
+          <span>{t('heritageGuardians')}</span>
         </div>
         <h2 className="text-3xl sm:text-5xl font-serif font-bold text-artisan-indigo">
-          Voices of India's Master Artisans
+          {t('voicesOfArtisans')}
         </h2>
         <p className="text-sm text-artisan-slate/80 leading-relaxed">
-          Behind every brush stroke, potter’s wheel spin, and loom pass lies generations of dedication. Meet the master craftsmen and women shaping India's living cultural legacy.
+          {t('voicesSubtitle')}
         </p>
       </div>
 
@@ -71,7 +71,7 @@ export const ArtisanStories: React.FC = () => {
                     {artisan.craftSpecialty}
                   </span>
                   <span className="bg-artisan-sand text-artisan-indigo font-bold px-2.5 py-1 rounded-full text-[10px]">
-                    {artisan.experienceYears} Years Master
+                    {artisan.experienceYears} {t('yearsExperience')}
                   </span>
                 </div>
 
@@ -93,7 +93,7 @@ export const ArtisanStories: React.FC = () => {
                 }}
                 className="w-full py-2.5 px-4 rounded-xl bg-artisan-sand hover:bg-artisan-sand-dark text-artisan-indigo font-bold text-xs border border-artisan-terracotta/20 flex items-center justify-center gap-2 transition-colors"
               >
-                <span>View {artisan.name.split(' ')[0]}'s Creation</span>
+                <span>{artisan.name.split(' ')[0]} - {t('preview')}</span>
                 <ArrowRight className="w-3.5 h-3.5 text-artisan-terracotta" />
               </button>
             </div>

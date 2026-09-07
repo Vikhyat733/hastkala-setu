@@ -20,6 +20,8 @@ export interface MultilingualText {
   kn?: string;
 }
 
+export type GIVerificationStatus = 'verified' | 'ai_suggested' | 'not_verified' | 'unknown';
+
 export interface ArtisanProfile {
   id: string;
   name: string;
@@ -44,6 +46,10 @@ export interface CraftPriceBreakdown {
   hourlyFairWageRate: number;
   fairLaborCost: number;
   packagingAndLogistics: number;
+  fairMargin: number;
+  marketRangeMin: number;
+  marketRangeMax: number;
+  estimationBasis: 'ai_analysis' | 'reference_data' | 'artisan_input';
   suggestedPrice: number;
   minPrice: number;
   artisanDirectSharePercent: number;
@@ -73,6 +79,7 @@ export interface Product {
   originRegion: string;
   giTagStatus: {
     hasGiTag: boolean;
+    verificationStatus: GIVerificationStatus;
     giTagNumber?: string;
     registeredName?: string;
   };
@@ -121,6 +128,8 @@ export interface Order {
   trackingNumber: string;
 }
 
+export type AIResultSource = 'gemini_api' | 'demo_fallback' | 'backend_api';
+
 export interface AIVisionResult {
   title: MultilingualText;
   category: Product['category'];
@@ -130,6 +139,7 @@ export interface AIVisionResult {
   originState: string;
   hasGiTag: boolean;
   giTagName?: string;
+  giVerificationStatus: GIVerificationStatus;
   priceBreakdown: CraftPriceBreakdown;
   shortDescription: MultilingualText;
   fullStory: MultilingualText;
@@ -139,9 +149,38 @@ export interface AIVisionResult {
   confidenceScore: number;
   detectedVisualFeatures: string[];
   rawGeminiResponse?: string;
+  resultSource: AIResultSource;
+  isDemo?: boolean;
+  missingInfoPrompt?: string;
 }
 
-export type ViewMode = 'marketplace' | 'ai-studio' | 'artisan-dashboard' | 'artisan-stories' | 'my-orders' | 'rural-artisan-app';
+export interface B2BInquiry {
+  id: string;
+  productId?: string;
+  productTitle?: string;
+  craftCategory: string;
+  artisanId?: string;
+  artisanName?: string;
+  quantity: number;
+  targetDeliveryDate: string;
+  buyerName: string;
+  buyerOrganization: string;
+  buyerEmail: string;
+  buyerPhone: string;
+  buyerType: 'hotel' | 'boutique' | 'corporate_gift' | 'retailer' | 'interior_designer' | 'exporter' | 'other';
+  customizationNotes: string;
+  status: 'pending' | 'in_review' | 'connected';
+  createdAt: string;
+}
+
+export type ViewMode = 
+  | 'marketplace' 
+  | 'ai-studio' 
+  | 'artisan-dashboard' 
+  | 'artisan-stories' 
+  | 'my-orders' 
+  | 'rural-artisan-app'
+  | 'b2b-linkage';
 
 export type RuralAppScreen = 
   | 'welcome'           // Screen 1: Language & Welcome

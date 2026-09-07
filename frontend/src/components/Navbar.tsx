@@ -54,7 +54,7 @@ export const Navbar: React.FC<NavbarProps> = ({ searchQuery, setSearchQuery }) =
       <div className="bg-gradient-to-r from-artisan-indigo via-artisan-terracotta to-artisan-indigo text-white text-xs py-1.5 px-4 text-center font-medium tracking-wide flex items-center justify-center gap-2">
         <span className="inline-block animate-pulse text-amber-300">🪔</span>
         <span>
-          <strong>SIH Mela Special:</strong> 100% Direct Fair-Trade Proceeds to 12,400+ Verified Rural Indian Artisans & GI Guilds.
+          <strong>{t('navBannerPrefix')}</strong> {t('navBanner')}
         </span>
         <span className="hidden md:inline bg-amber-400/20 text-amber-200 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider">
           Gemini Vision Powered
@@ -137,7 +137,7 @@ export const Navbar: React.FC<NavbarProps> = ({ searchQuery, setSearchQuery }) =
               }`}
             >
               <span className="text-base">🌾</span>
-              <span>कारीगर ऐप (Mobile App)</span>
+              <span>{t('ruralAppNav')}</span>
               <span className="bg-[#E67E22] text-white text-[9px] font-black px-1.5 py-0.2 rounded-full uppercase tracking-tighter shadow-sm animate-pulse">
                 New
               </span>
@@ -170,6 +170,17 @@ export const Navbar: React.FC<NavbarProps> = ({ searchQuery, setSearchQuery }) =
               <Store className="w-4 h-4" />
               <span className="hidden lg:inline">{t('artisanHubNav')}</span>
               <span className="lg:hidden">Seller</span>
+            </button>
+
+            <button
+              onClick={() => handleNav('b2b-linkage')}
+              className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-semibold transition-all ${
+                currentView === 'b2b-linkage'
+                  ? 'bg-purple-700 text-white shadow-sm'
+                  : 'text-artisan-indigo hover:bg-purple-50'
+              }`}
+            >
+              <span>🏢 {t('b2bNav')}</span>
             </button>
 
             <button
@@ -207,7 +218,7 @@ export const Navbar: React.FC<NavbarProps> = ({ searchQuery, setSearchQuery }) =
                   onMouseLeave={() => setLangDropdownOpen(false)}
                 >
                   <div className="px-3 py-1 text-[11px] font-bold text-artisan-slate/60 uppercase tracking-wider border-b border-gray-100">
-                    Select Language / भाषा
+                    {t('selectLanguageHeading')}
                   </div>
                   {LANGUAGES.map((lang) => (
                     <button
@@ -268,7 +279,7 @@ export const Navbar: React.FC<NavbarProps> = ({ searchQuery, setSearchQuery }) =
               className="relative flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl bg-artisan-terracotta text-white hover:bg-artisan-terracotta-dark shadow-md shadow-artisan-terracotta/25 font-bold text-xs sm:text-sm transition-all group"
             >
               <ShoppingBag className="w-4 h-4 group-hover:rotate-12 transition-transform" />
-              <span className="hidden sm:inline font-semibold">Cart</span>
+              <span className="hidden sm:inline font-semibold">{t('cart')}</span>
               {totalCartItems > 0 && (
                 <span className="bg-white text-artisan-terracotta font-black text-xs px-1.5 py-0.5 rounded-full">
                   {totalCartItems}
@@ -309,10 +320,10 @@ export const Navbar: React.FC<NavbarProps> = ({ searchQuery, setSearchQuery }) =
             >
               <div className="flex items-center gap-3">
                 <span className="text-base">🌾</span>
-                <span>कारीगर ऐप (Rural Mobile App)</span>
+                <span>{t('ruralAppNav')}</span>
               </div>
               <span className="text-[10px] bg-[#3A6B35] text-white px-2 py-0.5 rounded-full font-black">
-                App View
+                {t('appView')}
               </span>
             </button>
             <button
@@ -335,6 +346,13 @@ export const Navbar: React.FC<NavbarProps> = ({ searchQuery, setSearchQuery }) =
               </span>
             </button>
             <button
+              onClick={() => handleNav('b2b-linkage')}
+              className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-left text-purple-900 bg-purple-50 hover:bg-purple-100"
+            >
+              <span>🏢</span>
+              <span>{t('b2bWholesaleLeads')}</span>
+            </button>
+            <button
               onClick={() => handleNav('artisan-dashboard')}
               className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-left text-artisan-indigo hover:bg-artisan-sand"
             >
@@ -353,7 +371,7 @@ export const Navbar: React.FC<NavbarProps> = ({ searchQuery, setSearchQuery }) =
               className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-left text-artisan-indigo hover:bg-artisan-sand"
             >
               <PackageCheck className="w-4 h-4 text-artisan-terracotta" />
-              <span>My Orders</span>
+              <span>{t('myOrdersNav')}</span>
             </button>
           </div>
         )}

@@ -1,262 +1,476 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useMarketplace } from '../context/MarketplaceContext';
 import { 
   TrendingUp, 
   Sparkles, 
-  Store, 
   Package, 
   Coins, 
   HeartHandshake, 
   Plus, 
-  ArrowUpRight, 
   Eye, 
+  Award,
+  Info,
+  Mic,
+  Briefcase,
+  AlertTriangle,
+  CheckCircle2,
   Calendar,
-  Award
+  Building2,
+  Phone,
+  Mail,
+  ArrowRight,
+  Clock
 } from 'lucide-react';
 
 export const ArtisanDashboard: React.FC = () => {
   const {
     products,
     activeArtisan,
+    recentOrders,
+    b2bInquiries,
     formatPrice,
     setCurrentView,
     setSelectedProductForModal,
-    activeLanguage
+    activeLanguage,
+    t
   } = useMarketplace();
 
+  const [aiAssistantActive, setAiAssistantActive] = useState(false);
+  const [activeTab, setActiveTab] = useState<'products' | 'b2b-inquiries' | 'orders'>('products');
+
+  // Honest product filtering: products created by this artisan or published during this session
   const artisanProducts = products.filter(
-    (p) => p.artisan.id === activeArtisan.id || p.isAiGenerated
+    (p) => p.artisan.id === activeArtisan.id || p.artisan.id === 'artisan-self' || p.isAiGenerated
   );
 
-  const totalEarnings = artisanProducts.reduce((sum, p) => sum + p.price * 12, 142800);
-  const totalItemsSold = activeArtisan.totalProductsSold + (artisanProducts.length > 0 ? 14 : 0);
+  // Honest calculations derived from actual current state
+  const totalListedInventory = artisanProducts.reduce((sum, p) => sum + (p.stockCount || 0), 0);
+  const totalInventoryValue = artisanProducts.reduce((sum, p) => sum + p.price * (p.stockCount || 0), 0);
+  const totalOrdersCount = recentOrders.length;
+  const totalSalesRevenue = recentOrders.reduce((sum, o) => sum + o.total, 0);
+
+  // Low stock products alert
+  const lowStockProducts = artisanProducts.filter((p) => (p.stockCount || 0) < 5);
+
+  // AI Virtual Business Manager Actionable Insights
+  const generateBusinessManagerInsights = () => {
+    const insights: string[] = [];
+
+    insights.push(`${t('advisorNoteProducts')} ${artisanProducts.length} ${t('advisorNoteProductsSuffix')}`);
+
+    if (lowStockProducts.length > 0) {
+      insights.push(`${t('advisorNoteStockLow')} (${lowStockProducts.map(p => p.title[activeLanguage] || p.title.en).join(', ')})`);
+    } else {
+      insights.push(`${t('advisorNoteStockGood')} ${totalListedInventory} ${t('advisorNoteUnits')}`);
+    }
+
+    if (b2bInquiries.length > 0) {
+      insights.push(`🏢 ${b2bInquiries.length} ${t('advisorNoteB2B')} (${b2bInquiries.reduce((s, i) => s + i.quantity, 0)} ${t('pieces')})`);
+    }
+
+    insights.push(`💡 ${t('advisorNoteTip')}`);
+
+    return insights;
+  };
+
+  const businessInsights = generateBusinessManagerInsights();
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-in fade-in duration-300">
       
       {/* Top Seller Profile Banner */}
-      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-artisan-terracotta/20 shadow-craft flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-        
+      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#B84A1C]/20 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div className="flex items-center gap-5">
           <img
             src={activeArtisan.avatar}
             alt={activeArtisan.name}
-            className="w-20 h-20 rounded-3xl object-cover border-4 border-artisan-sand shadow-md"
+            className="w-20 h-20 rounded-3xl object-cover border-4 border-amber-100 shadow-md"
           />
 
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <h2 className="font-serif font-bold text-2xl text-artisan-indigo">
+              <h1 className="font-serif font-bold text-2xl text-[#1B2A4A]">
                 {activeArtisan.name}
-              </h2>
+              </h1>
               {activeArtisan.nationalAwardee && (
                 <span className="bg-amber-500 text-white text-[10px] font-black px-2 py-0.5 rounded-full flex items-center gap-1">
-                  <Award className="w-3 h-3" /> National Master
+                  <Award className="w-3 h-3" /> {t('nationalMaster')}
                 </span>
               )}
             </div>
-            <p className="text-xs text-artisan-slate/70">
+            <p className="text-xs text-stone-500">
               {activeArtisan.craftSpecialty} • {activeArtisan.village}, {activeArtisan.state}
             </p>
             <p className="text-xs font-semibold text-emerald-700">
-              ✓ Verified SIH Mela Master Guild • GI Certified Artisan
+              ✓ {t('verifiedGuildArtisan')}
             </p>
           </div>
         </div>
 
-        {/* Primary Action */}
-        <button
-          onClick={() => {
-            setCurrentView('ai-studio');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-          }}
-          className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-gradient-to-r from-artisan-terracotta to-artisan-saffron-gold text-white font-bold text-xs sm:text-sm shadow-md shadow-artisan-terracotta/30 hover:scale-105 transition-all"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Add Craft with Gemini AI</span>
-        </button>
-
+        {/* Primary Action Button */}
+        <div className="flex items-center gap-2 w-full md:w-auto">
+          <button
+            onClick={() => {
+              setCurrentView('ai-studio');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            className="flex-1 md:flex-initial flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-gradient-to-r from-[#B84A1C] to-amber-700 text-white font-bold text-xs sm:text-sm shadow-md shadow-[#B84A1C]/30 hover:scale-102 transition-all"
+          >
+            <Plus className="w-4 h-4" />
+            <span>{t('addNewCraftAI')}</span>
+          </button>
+        </div>
       </div>
 
-      {/* Metrics Row */}
+      {/* AI Virtual Business Manager Card ("आज मुझे क्या करना चाहिए?") */}
+      <div className="bg-gradient-to-r from-[#2A1810] to-[#451B12] rounded-3xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden">
+        <div className="relative z-10">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/40 text-amber-300 flex items-center justify-center">
+                <Sparkles className="w-6 h-6 animate-pulse" />
+              </div>
+              <div>
+                <span className="text-[10px] font-bold text-amber-300 uppercase tracking-widest block">
+                  AI Virtual Business Manager
+                </span>
+                <h3 className="text-lg sm:text-xl font-bold text-white">
+                  {t('whatShouldIDoToday')} ({t('artisanBusinessAdvisor')})
+                </h3>
+              </div>
+            </div>
+
+            <button
+              onClick={() => setAiAssistantActive(!aiAssistantActive)}
+              className="px-4 py-2 rounded-xl bg-amber-500 text-stone-950 text-xs font-bold hover:bg-amber-400 transition-all flex items-center gap-1.5 self-start sm:self-auto"
+            >
+              <Mic className="w-4 h-4" />
+              <span>{aiAssistantActive ? t('hideAdvice') : `🎤 ${t('viewAdvice')}`}</span>
+            </button>
+          </div>
+
+          {/* Business Insights Output */}
+          <div className="space-y-2 mt-4">
+            {businessInsights.map((insight, idx) => (
+              <div 
+                key={idx} 
+                className="p-3 bg-white/10 backdrop-blur-md rounded-xl border border-white/15 text-xs text-amber-100 flex items-start gap-2.5"
+              >
+                <div className="w-1.5 h-1.5 rounded-full bg-amber-400 mt-1.5 flex-shrink-0" />
+                <p className="leading-relaxed">{insight}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Primary Quick Touch Actions */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mt-6 pt-5 border-t border-white/15">
+            <button
+              onClick={() => {
+                setCurrentView('ai-studio');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              className="p-3 bg-white/10 hover:bg-white/20 rounded-xl text-center transition-all group"
+            >
+              <span className="text-lg block mb-1">📸</span>
+              <span className="text-xs font-bold text-white block">{t('newCraft')}</span>
+            </button>
+
+            <button
+              onClick={() => {
+                setCurrentView('rural-artisan-app');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              className="p-3 bg-white/10 hover:bg-white/20 rounded-xl text-center transition-all group"
+            >
+              <span className="text-lg block mb-1">🎤</span>
+              <span className="text-xs font-bold text-white block">{t('voiceDescribe')}</span>
+            </button>
+
+            <button
+              onClick={() => {
+                setCurrentView('ai-studio');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              className="p-3 bg-white/10 hover:bg-white/20 rounded-xl text-center transition-all group"
+            >
+              <span className="text-lg block mb-1">✨</span>
+              <span className="text-xs font-bold text-white block">{t('improvePhoto')}</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('b2b-inquiries')}
+              className="p-3 bg-white/10 hover:bg-white/20 rounded-xl text-center transition-all group"
+            >
+              <span className="text-lg block mb-1">🏢</span>
+              <span className="text-xs font-bold text-white block">{t('b2bWholesaleLeads')}</span>
+              <span className="text-[10px] text-amber-200/70">{b2bInquiries.length} {t('pieces')}</span>
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      {/* Metrics Row (Grounded in Real Data) */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         
-        <div className="bg-white p-5 rounded-3xl border border-artisan-terracotta/15 shadow-sm space-y-2">
+        <div className="bg-white p-5 rounded-3xl border border-stone-200/80 shadow-sm space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-artisan-slate/70">Total Fair Earnings</span>
-            <div className="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center">
-              <Coins className="w-4 h-4" />
-            </div>
-          </div>
-          <p className="text-2xl font-black text-artisan-indigo">{formatPrice(totalEarnings)}</p>
-          <p className="text-[11px] text-emerald-700 font-semibold flex items-center gap-1">
-            <TrendingUp className="w-3 h-3" /> +24% from previous Mela
-          </p>
-        </div>
-
-        <div className="bg-white p-5 rounded-3xl border border-artisan-terracotta/15 shadow-sm space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-artisan-slate/70">Crafts Sold</span>
-            <div className="w-8 h-8 rounded-xl bg-artisan-sand text-artisan-terracotta flex items-center justify-center">
+            <span className="text-xs font-bold text-stone-500">{t('totalActiveProducts')}</span>
+            <div className="w-8 h-8 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center">
               <Package className="w-4 h-4" />
             </div>
           </div>
-          <p className="text-2xl font-black text-artisan-indigo">{totalItemsSold}</p>
-          <p className="text-[11px] text-artisan-slate/60 font-semibold">
-            Across 18 Indian States & Export
+          <p className="text-2xl font-black text-[#1B2A4A]">{artisanProducts.length}</p>
+          <p className="text-[11px] text-stone-500 font-semibold">
+            {t('listedInMarketplace')}
           </p>
         </div>
 
-        <div className="bg-white p-5 rounded-3xl border border-artisan-terracotta/15 shadow-sm space-y-2">
+        <div className="bg-white p-5 rounded-3xl border border-stone-200/80 shadow-sm space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-artisan-slate/70">Direct Patron Tips</span>
-            <div className="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center">
+            <span className="text-xs font-bold text-stone-500">{t('availableStockUnits')}</span>
+            <div className="w-8 h-8 rounded-xl bg-blue-100 text-blue-800 flex items-center justify-center">
+              <Coins className="w-4 h-4" />
+            </div>
+          </div>
+          <p className="text-2xl font-black text-[#1B2A4A]">{totalListedInventory}</p>
+          <p className="text-[11px] text-stone-500 font-semibold">
+            {t('inventoryValue')}: {formatPrice(totalInventoryValue)}
+          </p>
+        </div>
+
+        <div className="bg-white p-5 rounded-3xl border border-stone-200/80 shadow-sm space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-bold text-stone-500">{t('b2bDemand')}</span>
+            <div className="w-8 h-8 rounded-xl bg-purple-100 text-purple-800 flex items-center justify-center">
+              <Briefcase className="w-4 h-4" />
+            </div>
+          </div>
+          <p className="text-2xl font-black text-[#1B2A4A]">{b2bInquiries.length}</p>
+          <p className="text-[11px] text-purple-700 font-semibold">
+            {b2bInquiries.reduce((s, i) => s + i.quantity, 0)} {t('totalDemandPieces')}
+          </p>
+        </div>
+
+        <div className="bg-white p-5 rounded-3xl border border-stone-200/80 shadow-sm space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-bold text-stone-500">{t('directCustomerOrders')}</span>
+            <div className="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center">
               <HeartHandshake className="w-4 h-4" />
             </div>
           </div>
-          <p className="text-2xl font-black text-artisan-indigo">{formatPrice(14600)}</p>
-          <p className="text-[11px] text-amber-800 font-semibold">
-            100% Direct to Artisan Account
-          </p>
-        </div>
-
-        <div className="bg-white p-5 rounded-3xl border border-artisan-terracotta/15 shadow-sm space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-artisan-slate/70">Master Rating</span>
-            <div className="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center">
-              <Award className="w-4 h-4" />
-            </div>
-          </div>
-          <p className="text-2xl font-black text-artisan-indigo">4.95 / 5.0</p>
-          <p className="text-[11px] text-purple-800 font-semibold">
-            From 94 Verified Patrons
+          <p className="text-2xl font-black text-[#1B2A4A]">{totalOrdersCount}</p>
+          <p className="text-[11px] text-emerald-700 font-semibold">
+            {t('revenue')}: {formatPrice(totalSalesRevenue)}
           </p>
         </div>
 
       </div>
 
-      {/* AI Demand & Festival Advisor */}
-      <div className="bg-gradient-to-r from-artisan-indigo to-[#2A3E6B] text-white rounded-3xl p-6 sm:p-8 shadow-xl space-y-4 relative overflow-hidden">
-        
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-amber-400 animate-pulse" />
-            <h3 className="font-serif font-bold text-xl text-amber-300">
-              AI Mela Trend & Festive Demand Advisor
-            </h3>
-          </div>
-          <span className="text-xs bg-white/10 px-3 py-1 rounded-full font-mono text-slate-200">
-            Updated Today
+      {/* Tabs Navigation */}
+      <div className="flex border-b border-stone-200 gap-6">
+        <button
+          onClick={() => setActiveTab('products')}
+          className={`pb-3 text-sm font-bold transition-all relative ${
+            activeTab === 'products'
+              ? 'text-[#B84A1C] border-b-2 border-[#B84A1C]'
+              : 'text-stone-500 hover:text-stone-800'
+          }`}
+        >
+          <span>{t('myProductsTab')} ({artisanProducts.length})</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('b2b-inquiries')}
+          className={`pb-3 text-sm font-bold transition-all relative flex items-center gap-2 ${
+            activeTab === 'b2b-inquiries'
+              ? 'text-[#B84A1C] border-b-2 border-[#B84A1C]'
+              : 'text-stone-500 hover:text-stone-800'
+          }`}
+        >
+          <span>{t('b2bLeadsTab')}</span>
+          <span className="px-2 py-0.5 bg-purple-100 text-purple-800 text-[10px] rounded-full font-extrabold">
+            {b2bInquiries.length}
           </span>
-        </div>
+        </button>
 
-        <p className="text-xs sm:text-sm text-slate-200 leading-relaxed max-w-3xl">
-          Based on upcoming festival seasons and buyer search trends, here are recommended production insights:
-        </p>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
-          
-          <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10 space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-amber-300">Diwali & Autumn Mela</span>
-              <span className="text-[10px] bg-emerald-500/30 text-emerald-200 font-bold px-2 py-0.5 rounded">
-                +62% Demand
-              </span>
-            </div>
-            <p className="text-xs text-slate-300">
-              High search volume for <strong>Terracotta Hand-Painted Diyas</strong> & <strong>Jaipur Blue Glaze Planters</strong>. Suggested production batch: 40 units.
-            </p>
-          </div>
-
-          <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10 space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-amber-300">Wedding Season</span>
-              <span className="text-[10px] bg-emerald-500/30 text-emerald-200 font-bold px-2 py-0.5 rounded">
-                +45% Demand
-              </span>
-            </div>
-            <p className="text-xs text-slate-300">
-              Buyers favor <strong>Banarasi Silk Brocade Shawls</strong> and <strong>Bastar Dhokra Elephant Centerpieces</strong> for traditional gifting.
-            </p>
-          </div>
-
-          <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10 space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-amber-300">Global Fair Trade Export</span>
-              <span className="text-[10px] bg-amber-400/30 text-amber-200 font-bold px-2 py-0.5 rounded">
-                High Value
-              </span>
-            </div>
-            <p className="text-xs text-slate-300">
-              Eco-friendly <strong>Channapatna Wooden Toys</strong> and <strong>Mithila Paintings</strong> qualify for international GI premium catalog.
-            </p>
-          </div>
-
-        </div>
-
+        <button
+          onClick={() => setActiveTab('orders')}
+          className={`pb-3 text-sm font-bold transition-all relative flex items-center gap-2 ${
+            activeTab === 'orders'
+              ? 'text-[#B84A1C] border-b-2 border-[#B84A1C]'
+              : 'text-stone-500 hover:text-stone-800'
+          }`}
+        >
+          <span>{t('ordersTab')} ({recentOrders.length})</span>
+        </button>
       </div>
 
-      {/* Active Listings Manager */}
-      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-artisan-terracotta/20 shadow-craft space-y-5">
-        
-        <div className="flex items-center justify-between">
-          <h3 className="font-serif font-bold text-xl text-artisan-indigo">
-            Your Active Craft Catalog ({products.length})
-          </h3>
-          <span className="text-xs text-artisan-slate/60">
-            Live in SIH Mela Store
-          </span>
-        </div>
-
-        <div className="space-y-3">
-          {products.map((p) => {
-            const title = p.title[activeLanguage] || p.title.en;
-            return (
+      {/* Tab 1: Products Grid */}
+      {activeTab === 'products' && (
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {artisanProducts.map((product) => (
               <div
-                key={p.id}
-                className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-2xl bg-artisan-sand/40 border border-artisan-terracotta/10 hover:border-artisan-terracotta/30 transition-all"
+                key={product.id}
+                className="bg-white rounded-3xl overflow-hidden border border-stone-200/80 shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
               >
-                <div className="flex items-center gap-4">
-                  <img
-                    src={p.images[0]}
-                    alt={title}
-                    className="w-16 h-16 rounded-xl object-cover border border-artisan-terracotta/20 flex-shrink-0"
-                  />
-                  <div>
-                    <h4 className="font-bold text-sm text-artisan-indigo">{title}</h4>
-                    <p className="text-xs text-artisan-slate/70">
-                      {p.category} • {p.originState} • Stock: {p.stockCount} units
-                    </p>
-                    {p.giTagStatus.hasGiTag && (
-                      <span className="text-[10px] font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded mt-1 inline-block">
-                        GI Tagged
+                <div>
+                  <div className="relative h-48 bg-stone-100">
+                    <img
+                      src={product.images[0]}
+                      alt={product.title.en}
+                      className="w-full h-full object-cover"
+                    />
+                    {product.isAiGenerated && (
+                      <span className="absolute top-3 left-3 bg-gradient-to-r from-amber-600 to-amber-700 text-white text-[10px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1 shadow-sm">
+                        <Sparkles className="w-3 h-3" /> {t('aiAssistedCatalog')}
                       </span>
                     )}
+                    <span className="absolute bottom-3 right-3 bg-black/70 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg backdrop-blur-xs">
+                      {t('stock')}: {product.stockCount} {t('pieces')}
+                    </span>
+                  </div>
+
+                  <div className="p-5 space-y-2">
+                    <h4 className="font-bold text-base text-[#1B2A4A] line-clamp-1">
+                      {product.title[activeLanguage] || product.title.en}
+                    </h4>
+                    <p className="text-xs text-stone-500">
+                      {product.craftTechnique}
+                    </p>
+
+                    <div className="pt-2 flex items-center justify-between border-t border-stone-100 text-xs">
+                      <span className="font-bold text-stone-700">{t('price')}:</span>
+                      <span className="font-extrabold text-[#1B2A4A] text-base">{formatPrice(product.price)}</span>
+                    </div>
+
+                    <div className="flex items-center justify-between text-[11px] text-stone-500">
+                      <span>{t('artisanDirectShare')}:</span>
+                      <span className="font-bold text-emerald-700">{product.priceBreakdown.artisanDirectSharePercent}%</span>
+                    </div>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between sm:justify-end gap-4">
-                  <div className="text-left sm:text-right">
-                    <p className="font-black text-base text-artisan-indigo">{formatPrice(p.price)}</p>
-                    <p className="text-[10px] text-emerald-700 font-bold">
-                      {p.priceBreakdown.artisanDirectSharePercent}% Direct Share
-                    </p>
-                  </div>
-
+                <div className="p-5 pt-0">
                   <button
-                    onClick={() => setSelectedProductForModal(p)}
-                    className="p-2.5 rounded-xl bg-white hover:bg-artisan-sand text-artisan-indigo border border-artisan-terracotta/20 font-bold text-xs flex items-center gap-1.5"
+                    onClick={() => setSelectedProductForModal(product)}
+                    className="w-full py-2.5 bg-stone-100 hover:bg-stone-200 text-[#1B2A4A] font-bold text-xs rounded-xl transition-all flex items-center justify-center gap-1.5"
                   >
-                    <Eye className="w-4 h-4 text-artisan-terracotta" />
-                    <span>View Modal</span>
+                    <Eye className="w-4 h-4" />
+                    <span>{t('preview')}</span>
                   </button>
                 </div>
               </div>
-            );
-          })}
+            ))}
+          </div>
         </div>
+      )}
 
-      </div>
+      {/* Tab 2: B2B Wholesale Leads */}
+      {activeTab === 'b2b-inquiries' && (
+        <div className="space-y-4">
+          <div className="bg-purple-50/60 border border-purple-200 rounded-2xl p-4 text-xs text-purple-900 flex items-start gap-3">
+            <Building2 className="w-5 h-5 text-purple-700 flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="font-bold">{t('b2bMarketLinkage')}</p>
+              <p className="text-purple-800/80 mt-0.5">
+                {t('b2bMarketLinkageDesc')}
+              </p>
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            {b2bInquiries.map((inquiry) => (
+              <div
+                key={inquiry.id}
+                className="bg-white rounded-2xl p-5 border border-stone-200/80 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+              >
+                <div className="space-y-1.5">
+                  <div className="flex items-center gap-2">
+                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-purple-100 text-purple-800">
+                      {inquiry.buyerType}
+                    </span>
+                    <h4 className="font-bold text-base text-[#1B2A4A]">{inquiry.buyerOrganization}</h4>
+                  </div>
+                  
+                  <p className="text-xs text-stone-600">
+                    <strong>{t('demand')}:</strong> {inquiry.quantity} {t('pieces')} • <strong>{t('product')}:</strong> {inquiry.productTitle || inquiry.craftCategory}
+                  </p>
+                  
+                  {inquiry.customizationNotes && (
+                    <p className="text-xs text-stone-500 italic">
+                      "{inquiry.customizationNotes}"
+                    </p>
+                  )}
+
+                  <div className="flex flex-wrap items-center gap-4 text-[11px] text-stone-500 pt-1">
+                    <span className="flex items-center gap-1"><Mail className="w-3.5 h-3.5" /> {inquiry.buyerEmail}</span>
+                    <span className="flex items-center gap-1"><Phone className="w-3.5 h-3.5" /> {inquiry.buyerPhone}</span>
+                    <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" /> {t('delivery')}: {inquiry.targetDeliveryDate}</span>
+                  </div>
+                </div>
+
+                <div className="flex sm:flex-col items-center sm:items-end justify-between gap-2">
+                  <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${
+                    inquiry.status === 'connected'
+                      ? 'bg-emerald-100 text-emerald-800'
+                      : inquiry.status === 'in_review'
+                      ? 'bg-amber-100 text-amber-800'
+                      : 'bg-blue-100 text-blue-800'
+                  }`}>
+                    {inquiry.status === 'connected' ? `✓ ${t('connectedStatus')}` : inquiry.status === 'in_review' ? t('inReviewStatus') : t('newRequestStatus')}
+                  </span>
+
+                  <a
+                    href={`tel:${inquiry.buyerPhone}`}
+                    className="px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1"
+                  >
+                    <Phone className="w-3.5 h-3.5" />
+                    <span>{t('callBuyer')}</span>
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Tab 3: Customer Orders */}
+      {activeTab === 'orders' && (
+        <div className="space-y-4">
+          {recentOrders.length === 0 ? (
+            <div className="bg-white rounded-3xl p-12 text-center border border-stone-200">
+              <Package className="w-12 h-12 text-stone-300 mx-auto mb-3" />
+              <p className="text-sm font-bold text-stone-700">{t('noOrdersArtisan')}</p>
+              <p className="text-xs text-stone-500 mt-1">{t('noOrdersArtisanDesc')}</p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {recentOrders.map((order) => (
+                <div
+                  key={order.id}
+                  className="bg-white rounded-2xl p-5 border border-stone-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                >
+                  <div>
+                    <span className="text-[11px] font-bold text-stone-500 block">{t('orderNumber')}{order.id}</span>
+                    <h4 className="font-bold text-sm text-[#1B2A4A]">{order.customerName}</h4>
+                    <p className="text-xs text-stone-500">{order.shippingAddress}</p>
+                    <p className="text-xs text-stone-600 mt-1">
+                      {t('items')}: {order.items.map(i => `${i.product.title[activeLanguage] || i.product.title.en} (x${i.quantity})`).join(', ')}
+                    </p>
+                  </div>
+
+                  <div className="text-right">
+                    <span className="text-base font-black text-[#1B2A4A]">{formatPrice(order.total)}</span>
+                    <span className="block text-[11px] text-emerald-700 font-bold">{t('paidStatus')}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
     </div>
   );
