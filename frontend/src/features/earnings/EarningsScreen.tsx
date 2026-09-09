@@ -140,9 +140,9 @@ export const EarningsScreen: React.FC = () => {
         {/* ─── 1. TIME PERIOD TABS ─── */}
         <div className="bg-[#EDE5DA] p-1 rounded-2xl flex gap-1 border border-[#E0D8CE]">
           {[
-            { id: 'this_month', label: t.earnings.thisMonth },
-            { id: 'last_month', label: t.earnings.lastMonth },
-            { id: 'all_time', label: t.earnings.allTime },
+            { id: 'this_month', label: t.earnings.periodThisMonth },
+            { id: 'last_month', label: t.earnings.periodLastMonth },
+            { id: 'all_time', label: t.earnings.periodAllTime },
           ].map((item) => (
             <button
               key={item.id}
@@ -164,12 +164,12 @@ export const EarningsScreen: React.FC = () => {
           <div className="flex items-center justify-between">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-xs text-[11px] font-black uppercase tracking-wider text-amber-200">
               <Coins className="w-3.5 h-3.5 text-amber-300" />
-              {t.earnings.totalSales}
+              {t.earnings.grossSales}
             </span>
             <span className="text-[10px] font-bold text-stone-300 bg-white/10 px-2.5 py-0.5 rounded-full">
-              {period === 'this_month' && t.earnings.thisMonth}
-              {period === 'last_month' && t.earnings.lastMonth}
-              {period === 'all_time' && t.earnings.allTime}
+              {period === 'this_month' && t.earnings.periodThisMonth}
+              {period === 'last_month' && t.earnings.periodLastMonth}
+              {period === 'all_time' && t.earnings.periodAllTime}
             </span>
           </div>
 
@@ -179,22 +179,22 @@ export const EarningsScreen: React.FC = () => {
             </div>
             <p className="text-xs text-emerald-200 font-medium mt-1 flex items-center gap-1">
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-300 flex-shrink-0" />
-              <span>{t.earnings.totalSalesDesc}</span>
+              <span>{t.earnings.recognizedNotice}</span>
             </p>
           </div>
 
           {/* Transparent Net Earnings Breakdown */}
           <div className="pt-3 border-t border-white/15 grid grid-cols-3 gap-2 text-center text-xs">
             <div className="bg-white/10 p-2 rounded-xl">
-              <span className="text-[10px] text-stone-300 block">{t.earnings.totalSales}</span>
+              <span className="text-[10px] text-stone-300 block">{t.earnings.grossSales}</span>
               <span className="font-bold text-white">{formatCurrency(summary?.total_sales)}</span>
             </div>
             <div className="bg-white/10 p-2 rounded-xl">
-              <span className="text-[10px] text-stone-300 block">{t.earnings.melaFee}</span>
-              <span className="font-bold text-amber-300">{t.earnings.melaFeeFree}</span>
+              <span className="text-[10px] text-stone-300 block">{t.earnings.feeLabel}</span>
+              <span className="font-bold text-amber-300">{t.earnings.freeFee}</span>
             </div>
             <div className="bg-white/10 p-2 rounded-xl">
-              <span className="text-[10px] text-stone-300 block">{t.earnings.netEarnings}</span>
+              <span className="text-[10px] text-stone-300 block">{t.earnings.netPayout}</span>
               <span className="font-black text-emerald-300">{formatCurrency(summary?.net_earnings)}</span>
             </div>
           </div>
@@ -211,7 +211,7 @@ export const EarningsScreen: React.FC = () => {
               {summary?.completed_orders || 0}
             </span>
             <span className="text-[10px] font-bold text-[#6B5E59] uppercase block leading-tight">
-              {t.earnings.completedOrders}
+              {t.earnings.completedOrdersLabel}
             </span>
           </div>
 
@@ -224,7 +224,7 @@ export const EarningsScreen: React.FC = () => {
               {summary?.products_sold || 0}
             </span>
             <span className="text-[10px] font-bold text-[#6B5E59] uppercase block leading-tight">
-              {t.earnings.productsSold}
+              {t.earnings.productsSoldLabel}
             </span>
           </div>
 
@@ -237,7 +237,7 @@ export const EarningsScreen: React.FC = () => {
               {summary?.pending_orders_count || 0}
             </span>
             <span className="text-[10px] font-bold text-[#6B5E59] uppercase block leading-tight">
-              {t.earnings.pendingPipeline}
+              {t.earnings.inPipelineLabel}
             </span>
           </div>
         </div>
@@ -251,10 +251,10 @@ export const EarningsScreen: React.FC = () => {
               </div>
               <div>
                 <h3 className="text-sm font-black text-[#261D1A]">
-                  {t.earnings.payoutAccount}
+                  {t.earnings.payoutCardTitle}
                 </h3>
                 <p className="text-[10px] text-[#6B5E59]">
-                  {t.earnings.payoutAccountSub}
+                  {t.earnings.payoutCardSubtitle}
                 </p>
               </div>
             </div>

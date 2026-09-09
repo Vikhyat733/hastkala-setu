@@ -273,7 +273,7 @@ export const MarketplaceScreen: React.FC = () => {
     return (
       <div className="min-h-screen bg-[#FAF6F0] flex flex-col justify-between pb-12">
         <AppHeader
-          title={t.marketplace.productDetails}
+          title="Product Details"
           subtitle="MELA Marketplace"
           onBack={() => setSelectedProduct(null)}
           showLanguageToggle={true}
@@ -922,7 +922,7 @@ export const MarketplaceScreen: React.FC = () => {
         <div className="space-y-1">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#1B4D3E]/10 text-[#1B4D3E] text-[11px] font-black uppercase tracking-wider">
             <ShieldCheck className="w-3.5 h-3.5 text-[#C04B27]" />
-            <span>{t.marketplace.directFromArtisansBadge || 'Direct from Artisans'}</span>
+            <span>{t.marketplace.directTrustBadge || 'Direct from Artisans'}</span>
           </div>
           <h2 className="text-2xl font-black text-[#261D1A] tracking-tight">
             {t.marketplace.title}
