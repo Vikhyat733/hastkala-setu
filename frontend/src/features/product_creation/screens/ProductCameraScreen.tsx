@@ -197,7 +197,7 @@ export const ProductCameraScreen: React.FC = () => {
                 <div className="flex items-center justify-center gap-2">
                   <span className="text-xl">📸</span>
                   <span className="text-sm">
-                    {isEnhancing ? t.sellProduct.camera.processingPhoto : t.sellProduct.camera.takePhotoBtn}
+                    {isEnhancing ? t.sellProduct.studio.enhancing : t.sellProduct.camera.takePhoto}
                   </span>
                 </div>
               </PrimaryButton>

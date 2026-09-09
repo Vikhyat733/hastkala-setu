@@ -77,7 +77,7 @@ export const ProfileScreen: React.FC = () => {
             {/* ─── BUSINESS & EARNINGS SHORTCUTS ─── */}
             <div className="bg-white rounded-3xl p-4 border border-[#E0D8CE] shadow-xs space-y-2.5">
               <h4 className="text-xs font-black uppercase tracking-wider text-[#6B5E59] px-1">
-                {t.profile.business}
+                {t.profile.businessSection}
               </h4>
 
               <div className="space-y-1.5">
@@ -115,10 +115,10 @@ export const ProfileScreen: React.FC = () => {
                     </div>
                     <div>
                       <span className="text-xs font-black text-[#261D1A] block">
-                        {t.profile.payoutAccount}
+                        {t.profile.payoutLink}
                       </span>
                       <span className="text-[10px] text-[#6B5E59]">
-                        UPI / Bank Transfer
+                        {t.profile.payoutDesc}
                       </span>
                     </div>
                   </div>
@@ -137,10 +137,10 @@ export const ProfileScreen: React.FC = () => {
                     </div>
                     <div>
                       <span className="text-xs font-black text-[#261D1A] block">
-                        {t.myProducts.title}
+                        {t.profile.myProductsLink}
                       </span>
                       <span className="text-[10px] text-[#6B5E59]">
-                        {t.dashboard.products}
+                        {t.profile.productsDesc}
                       </span>
                     </div>
                   </div>
@@ -157,7 +157,7 @@ export const ProfileScreen: React.FC = () => {
               <div className="flex items-center justify-between">
                 <h4 className="text-xs font-black uppercase tracking-wider text-[#6B5E59] flex items-center gap-1.5 px-1">
                   <Globe className="w-4 h-4 text-[#1B4D3E]" />
-                  {t.profile.language}
+                  {t.profile.activeLang}
                 </h4>
                 <span className="text-[10px] font-bold text-[#C04B27] bg-[#C04B27]/10 px-2 py-0.5 rounded-full">
                   4 Languages Ready
@@ -204,7 +204,7 @@ export const ProfileScreen: React.FC = () => {
               <div className="flex items-center justify-between py-1 border-b border-[#F0EBE1]">
                 <span className="text-[#6B5E59] font-semibold flex items-center gap-2">
                   <Award className="w-4 h-4 text-[#C04B27]" />
-                  {t.profile.craftSpecialization}
+                  {t.profile.craftSpec}
                 </span>
                 <span className="font-bold text-[#261D1A]">
                   {selectedLanguage === 'hi'
