@@ -28,6 +28,7 @@ import { formatCurrency } from '../../utils/currency';
 
 export const MyOrdersScreen: React.FC = () => {
   const { selectedLanguage, setLanguage, currentUser, navigate, t, goBack } = useMela();
+  const lang = selectedLanguage;
   const nextLangMap = { hi: 'en', en: 'mr', mr: 'bn', bn: 'hi' } as const;
 
   const [activeTab, setActiveTab] = useState<'artisan' | 'buyer'>('artisan');

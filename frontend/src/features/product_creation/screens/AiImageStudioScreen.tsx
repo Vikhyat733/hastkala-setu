@@ -1,5 +1,5 @@
 import React from 'react';
-import { RotateCcw, Check, Info } from 'lucide-react';
+import { RotateCcw, Check, Info, Sparkles } from 'lucide-react';
 import { useProductCreation } from '../context/ProductCreationContext';
 import { useMela } from '../../../context/MelaContext';
 import { AppHeader } from '../../../core/design-system/AppHeader';

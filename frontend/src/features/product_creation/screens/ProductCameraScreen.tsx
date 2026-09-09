@@ -1,8 +1,9 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Camera, Image as ImageIcon, ArrowLeft, RefreshCw, Zap, Lightbulb, AlertCircle } from 'lucide-react';
+import { Camera, Image as ImageIcon, ArrowLeft, RefreshCw, Zap, Lightbulb, AlertCircle, Upload } from 'lucide-react';
 import { useProductCreation } from '../context/ProductCreationContext';
 import { useMela } from '../../../context/MelaContext';
 import { AppHeader } from '../../../core/design-system/AppHeader';
+import { PrimaryButton } from '../../../core/design-system/PrimaryButton';
 
 // Beautiful sample artisan craft images for instant testing/demonstration
 const SAMPLE_CRAFT_IMAGES = [
@@ -23,6 +24,7 @@ const SAMPLE_CRAFT_IMAGES = [
 export const ProductCameraScreen: React.FC = () => {
   const { setImageAndEnhance, isEnhancing, errorMessage, setErrorMessage, clearError } = useProductCreation();
   const { t, selectedLanguage, navigate } = useMela();
+  const lang = selectedLanguage;
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -185,7 +187,7 @@ export const ProductCameraScreen: React.FC = () => {
           <div className="mt-6 md:mt-0 space-y-6">
             <div className="space-y-4">
               <PrimaryButton
-                onClick={() => captureAndEnhance(videoRef.current)}
+                onClick={handleCapture}
                 disabled={!cameraActive || isEnhancing}
                 className={`py-4 shadow-xl ${
                   !cameraActive || isEnhancing ? 'opacity-50' : 'hover:scale-102 active:scale-95'

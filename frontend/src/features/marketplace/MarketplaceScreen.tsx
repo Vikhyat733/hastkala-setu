@@ -24,6 +24,7 @@ import {
 import { useMela } from '../../context/MelaContext';
 import { AppHeader } from '../../core/design-system/AppHeader';
 import { PrimaryButton } from '../../core/design-system/PrimaryButton';
+import { formatCurrency } from '../../utils/currency';
 import {
   marketplaceService,
   MarketplaceProduct,
@@ -34,6 +35,7 @@ import { orderService, Order, DefaultAddress } from '../../services/orders/order
 
 export const MarketplaceScreen: React.FC = () => {
   const { selectedLanguage, setLanguage, currentUser, navigate, t, goBack } = useMela();
+  const lang = selectedLanguage;
   const nextLangMap = { hi: 'en', en: 'mr', mr: 'bn', bn: 'hi' } as const;
 
   // State
