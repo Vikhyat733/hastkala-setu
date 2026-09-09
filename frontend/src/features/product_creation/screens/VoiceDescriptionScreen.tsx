@@ -120,7 +120,7 @@ export const VoiceDescriptionScreen: React.FC = () => {
   const handleContinueToCatalog = async () => {
     const text = editedTranscript.trim() || state.voiceTranscript.trim();
     if (!text) {
-      setErrorMessage(t.errors.fieldRequired || 'Please speak or type your description first.');
+      setErrorMessage('Please speak or type your description first.');
       return;
     }
     await generateCatalogFromVoice(text);
@@ -211,7 +211,7 @@ export const VoiceDescriptionScreen: React.FC = () => {
               className="w-full max-w-xs py-3.5 px-6 rounded-2xl bg-[#261D1A] text-white font-black text-sm flex items-center justify-center gap-2.5 shadow-md active:scale-95 cursor-pointer hover:bg-black"
             >
               <Square className="w-4 h-4 fill-white text-white" />
-              {t.sellProduct.voice.stop}
+              {t.sellProduct.voice.stopRecording}
             </button>
           </div>
         )}
@@ -222,8 +222,8 @@ export const VoiceDescriptionScreen: React.FC = () => {
             <RefreshCw className="w-10 h-10 text-[#1B4D3E] animate-spin mx-auto" />
             <p className="text-sm font-black text-[#261D1A]">
               {isTranscribing
-                ? t.sellProduct.voice.processing
-                : t.sellProduct.voice.generatingDetails}
+                ? t.sellProduct.voice.transcribing
+                : 'Generating details...'}
             </p>
           </div>
         )}
@@ -235,7 +235,7 @@ export const VoiceDescriptionScreen: React.FC = () => {
               <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
               <div className="space-y-1">
                 <p className="text-sm font-black text-red-700">
-                  {t.errors.serverError || 'Voice input notice'}
+                  {t.errors.connectionError || 'Voice input notice'}
                 </p>
                 <p className="text-xs text-red-600">{errorMessage}</p>
               </div>
@@ -255,7 +255,7 @@ export const VoiceDescriptionScreen: React.FC = () => {
                 className="flex-1 py-2.5 rounded-xl border border-red-200 bg-white text-red-700 font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer"
               >
                 <Edit3 className="w-3.5 h-3.5" />
-                {t.sellProduct.voice.editTranscript}
+                Edit Transcript
               </button>
             </div>
           </div>
@@ -315,7 +315,7 @@ export const VoiceDescriptionScreen: React.FC = () => {
         {phase === 'editing' && !isRecording && !isTranscribing && (
           <div className="bg-white rounded-3xl border-2 border-[#1B4D3E]/30 shadow-md p-5 space-y-3 animate-in fade-in">
             <p className="text-xs font-black uppercase tracking-wider text-[#1B4D3E]">
-              {t.sellProduct.voice.editTranscript}
+              Edit Transcript
             </p>
             <textarea
               value={editedTranscript}
@@ -361,7 +361,7 @@ export const VoiceDescriptionScreen: React.FC = () => {
             <div className="flex items-center justify-between">
               <span className="text-xs font-black uppercase tracking-wider text-[#1B4D3E] flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5 text-[#C04B27]" />
-                {t.sellProduct.voice.reviewTranscript}
+                Review Transcript
               </span>
               <button
                 type="button"
@@ -369,7 +369,7 @@ export const VoiceDescriptionScreen: React.FC = () => {
                 className="flex items-center gap-1 px-3 py-1 rounded-full bg-[#FAF6F0] border border-[#E0D8CE] text-xs font-bold text-[#261D1A] hover:bg-stone-100 cursor-pointer"
               >
                 <Volume2 className={`w-3.5 h-3.5 ${isSpeaking ? 'text-[#C04B27] animate-pulse' : ''}`} />
-                {t.sellProduct.voice.listen}
+                {t.sellProduct.voice.listenAgain}
               </button>
             </div>
 
@@ -384,7 +384,7 @@ export const VoiceDescriptionScreen: React.FC = () => {
                 className="flex-1 py-2.5 px-3 rounded-xl border border-[#E0D8CE] text-xs font-bold text-[#6B5E59] flex items-center justify-center gap-1.5 hover:bg-stone-50 cursor-pointer"
               >
                 <Edit3 className="w-3.5 h-3.5" />
-                {t.sellProduct.voice.editTranscript}
+                Edit Transcript
               </button>
               {isRecognitionSupported && (
                 <button

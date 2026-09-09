@@ -130,35 +130,48 @@ export const MyOrdersScreen: React.FC = () => {
   const TIMELINE_STEPS: { key: OrderStatus; label: string; desc: string }[] = [
     {
       key: 'PENDING',
-      label: t.orders.placed || 'Order Placed',
+      label: t.orders.timelineSteps.pending || 'Order Placed',
       desc: selectedLanguage === 'mr' ? 'ग्राहकाने ऑर्डर दिली आहे.' : selectedLanguage === 'bn' ? 'ক্রেতা অর্ডার জমা দিয়েছেন।' : selectedLanguage === 'hi' ? 'ग्राहक ने ऑर्डर दिया है।' : 'Buyer submitted the order.',
     },
     {
       key: 'ACCEPTED',
-      label: t.orders.accepted || 'Accepted by Artisan',
+      label: t.orders.timelineSteps.accepted || 'Accepted by Artisan',
       desc: selectedLanguage === 'mr' ? 'कारागिराने ऑर्डर स्वीकारली आहे.' : selectedLanguage === 'bn' ? 'কারিগর অর্ডার গ্রহণ করেছেন।' : selectedLanguage === 'hi' ? 'कारीगर ने ऑर्डर स्वीकार कर लिया।' : 'Artisan confirmed the request.',
     },
     {
       key: 'PREPARING',
-      label: t.orders.preparing || 'Preparing Product',
+      label: t.orders.timelineSteps.preparing || 'Preparing Product',
       desc: selectedLanguage === 'mr' ? 'कारागीर वस्तू तयार करत आहेत.' : selectedLanguage === 'bn' ? 'কারিগর পণ্য প্রস্তুত করছেন।' : selectedLanguage === 'hi' ? 'कारीगर हस्तशिल्प तैयार कर रहे हैं।' : 'Artisan is handcrafting the item.',
     },
     {
       key: 'READY_TO_DISPATCH',
-      label: t.orders.readyToDispatch || 'Ready to Dispatch',
+      label: t.orders.timelineSteps.ready || 'Ready to Dispatch',
       desc: selectedLanguage === 'mr' ? 'माल पाठवण्यासाठी तयार आहे.' : selectedLanguage === 'bn' ? 'পণ্য পাঠানোর জন্য প্রস্তুত।' : selectedLanguage === 'hi' ? 'सामान पैक होकर तैयार है।' : 'Packed and ready for pickup.',
     },
     {
       key: 'DISPATCHED',
-      label: t.orders.dispatched || 'Dispatched',
+      label: t.orders.timelineSteps.dispatched || 'Dispatched',
       desc: selectedLanguage === 'mr' ? 'माल पाठवला गेला आहे.' : selectedLanguage === 'bn' ? 'পণ্য পাঠানো হয়েছে।' : selectedLanguage === 'hi' ? 'सामान गंतव्य की ओर निकल चुका है।' : 'In transit to delivery address.',
     },
     {
       key: 'DELIVERED',
-      label: t.orders.completed || 'Delivered / Completed',
+      label: t.orders.timelineSteps.delivered || 'Delivered / Completed',
       desc: selectedLanguage === 'mr' ? 'ग्राहकाला माल मिळाला आहे.' : selectedLanguage === 'bn' ? 'ক্রেতার কাছে পণ্য পৌঁছেছে।' : selectedLanguage === 'hi' ? 'ग्राहक को सामान मिल गया है।' : 'Package delivered to buyer.',
     },
   ];
+
+  const getStepLabel = (status: OrderStatus): string => {
+    switch (status) {
+      case 'PENDING': return t.orders.timelineSteps.pending;
+      case 'ACCEPTED': return t.orders.timelineSteps.accepted;
+      case 'PREPARING': return t.orders.timelineSteps.preparing;
+      case 'READY_TO_DISPATCH': return t.orders.timelineSteps.ready;
+      case 'DISPATCHED': return t.orders.timelineSteps.dispatched;
+      case 'DELIVERED': return t.orders.timelineSteps.delivered;
+      case 'CANCELLED': return t.orders.timelineSteps.delivered || 'Cancelled'; // fallback
+      default: return status;
+    }
+  };
 
   const getStepIndex = (status: OrderStatus): number => {
     switch (status) {
@@ -188,49 +201,49 @@ export const MyOrdersScreen: React.FC = () => {
         return (
           <span className="px-2.5 py-1 rounded-full bg-amber-100 text-amber-900 text-[10px] font-black flex items-center gap-1">
             <Clock className="w-3 h-3 text-amber-700" />
-            {t.orders.pending}
+            {t.orders.timelineSteps.pending}
           </span>
         );
       case 'ACCEPTED':
         return (
           <span className="px-2.5 py-1 rounded-full bg-blue-100 text-blue-900 text-[10px] font-black flex items-center gap-1">
             <Check className="w-3 h-3 text-blue-700" />
-            {t.orders.accepted}
+            {t.orders.timelineSteps.accepted}
           </span>
         );
       case 'PREPARING':
         return (
           <span className="px-2.5 py-1 rounded-full bg-indigo-100 text-indigo-900 text-[10px] font-black flex items-center gap-1">
             <Box className="w-3 h-3 text-indigo-700" />
-            {t.orders.preparing}
+            {t.orders.timelineSteps.preparing}
           </span>
         );
       case 'READY_TO_DISPATCH':
         return (
           <span className="px-2.5 py-1 rounded-full bg-purple-100 text-purple-900 text-[10px] font-black flex items-center gap-1">
             <Package className="w-3 h-3 text-purple-700" />
-            {t.orders.readyToDispatch}
+            {t.orders.timelineSteps.ready}
           </span>
         );
       case 'DISPATCHED':
         return (
           <span className="px-2.5 py-1 rounded-full bg-cyan-100 text-cyan-900 text-[10px] font-black flex items-center gap-1">
             <Truck className="w-3 h-3 text-cyan-700" />
-            {t.orders.dispatched}
+            {t.orders.timelineSteps.dispatched}
           </span>
         );
       case 'DELIVERED':
         return (
           <span className="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-900 text-[10px] font-black flex items-center gap-1">
             <Gift className="w-3 h-3 text-emerald-700" />
-            {t.orders.delivered}
+            {t.orders.timelineSteps.delivered}
           </span>
         );
       case 'COMPLETED':
         return (
           <span className="px-2.5 py-1 rounded-full bg-emerald-600 text-white text-[10px] font-black flex items-center gap-1">
             <CheckCircle2 className="w-3 h-3 text-amber-300" />
-            {t.orders.completed}
+            {t.orders.timelineSteps.delivered}
           </span>
         );
       case 'CANCELLED':
@@ -246,7 +259,7 @@ export const MyOrdersScreen: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#FAF6F0] flex flex-col justify-between pb-12">
       <AppHeader
-        title={t.orders.myOrders}
+        title={t.orders.myOrdersTitle}
         subtitle="MELA Order Hub"
         onBack={() => navigate('/dashboard')}
         showLanguageToggle={true}
@@ -274,7 +287,7 @@ export const MyOrdersScreen: React.FC = () => {
                 : 'text-[#6B5E59] hover:text-[#261D1A]'
             }`}
           >
-            📦 {t.orders.artisanOrdersTab || (selectedLanguage === 'hi' ? 'प्राप्त ऑर्डर (कारीगर)' : selectedLanguage === 'mr' ? 'प्राप्त ऑर्डर्स (कारागीर)' : selectedLanguage === 'bn' ? 'গৃহীত অর্ডার (কারিগর)' : 'Artisan Orders')}
+            📦 {t.orders.artisanTab || (selectedLanguage === 'hi' ? 'प्राप्त ऑर्डर (कारीगर)' : selectedLanguage === 'mr' ? 'प्राप्त ऑर्डर्स (कारागीर)' : selectedLanguage === 'bn' ? 'গৃহীত অর্ডার (কারিগর)' : 'Artisan Orders')}
           </button>
           <button
             type="button"
@@ -285,7 +298,7 @@ export const MyOrdersScreen: React.FC = () => {
                 : 'text-[#6B5E59] hover:text-[#261D1A]'
             }`}
           >
-            🛍️ {t.orders.buyerOrdersTab || (selectedLanguage === 'hi' ? 'मेरी खरीदारी (ट्रैक)' : selectedLanguage === 'mr' ? 'माझी खरेदी (ट्रॅक)' : selectedLanguage === 'bn' ? 'আমার কেনাকাটা (ট্র্যাক)' : 'My Purchases')}
+            🛍️ {t.orders.buyerTab || (selectedLanguage === 'hi' ? 'मेरी खरीदारी (ट्रैक)' : selectedLanguage === 'mr' ? 'माझी खरेदी (ट्रॅक)' : selectedLanguage === 'bn' ? 'আমার কেনাকাটা (ট্র্যাক)' : 'My Purchases')}
           </button>
         </div>
 
