@@ -4,7 +4,8 @@ import { DesktopSidebar, NavTab } from './DesktopSidebar';
 import { BottomNavigation } from './BottomNavigation';
 
 export const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { currentRoute, navigate, t } = useMela();
+  const { currentRoute, navigate, t, viewMode } = useMela();
+  const isDesktop = viewMode === 'desktop';
 
   // Screens that should have the Sidebar / BottomNav
   const isMainScreen = [
@@ -40,9 +41,10 @@ export const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children })
   }
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#FAF6F0] selection:bg-[#C04B27]/20 selection:text-[#C04B27]">
-      {/* Desktop Sidebar (hidden on mobile) */}
-      <DesktopSidebar
+    <div className={`flex h-screen overflow-hidden selection:bg-[#C04B27]/20 selection:text-[#C04B27] ${isDesktop ? 'bg-[#FAF6F0]' : 'bg-gray-100 justify-center'}`}>
+      {/* Desktop Sidebar (hidden on mobile and in Android view) */}
+      {isDesktop && (
+        <DesktopSidebar
         currentTab={currentTab || 'home'}
         onTabChange={handleTabChange}
         labels={{
@@ -52,16 +54,16 @@ export const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children })
           profile: t.nav?.profile || 'Profile',
         }}
       />
+      )}
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col h-screen overflow-hidden relative">
+      <div className={`flex-1 flex flex-col h-screen overflow-hidden relative ${isDesktop ? '' : 'max-w-md w-full bg-[#FAF6F0] shadow-[0_0_40px_rgba(0,0,0,0.1)] border-x border-[#E0D8CE]'}`}>
         <div className="flex-1 overflow-y-auto">
           {children}
         </div>
 
-        {/* Mobile Bottom Navigation (hidden on desktop) */}
-        {/* We keep this here so it's global for main screens, and hide it on md+ */}
-        <div className="md:hidden">
+        {/* Mobile Bottom Navigation */}
+        <div className={isDesktop ? 'md:hidden' : 'block'}>
           <BottomNavigation
             currentTab={currentTab || 'home'}
             onTabChange={handleTabChange}

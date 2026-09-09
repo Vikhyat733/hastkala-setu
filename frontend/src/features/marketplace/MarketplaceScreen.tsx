@@ -34,8 +34,9 @@ import {
 import { orderService, Order, DefaultAddress } from '../../services/orders/orderService';
 
 export const MarketplaceScreen: React.FC = () => {
-  const { selectedLanguage, setLanguage, currentUser, navigate, t, goBack } = useMela();
+  const { selectedLanguage, setLanguage, currentUser, navigate, t, goBack, viewMode } = useMela();
   const lang = selectedLanguage;
+  const isDesktop = viewMode === 'desktop';
   const nextLangMap = { hi: 'en', en: 'mr', mr: 'bn', bn: 'hi' } as const;
 
   // State
@@ -280,8 +281,8 @@ export const MarketplaceScreen: React.FC = () => {
           onLanguageToggle={() => setLanguage(nextLangMap[selectedLanguage])}
         />
 
-        <main className="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 pb-20 md:pb-6">
-          <div className="md:grid md:grid-cols-2 md:gap-8 items-start">
+        <main className={`flex-1 w-full mx-auto p-4 ${isDesktop ? 'max-w-7xl md:p-6 pb-20 md:pb-6' : 'max-w-md pb-24 space-y-5'}`}>
+          <div className={isDesktop ? "md:grid md:grid-cols-2 md:gap-8 items-start" : "space-y-5"}>
             
             {/* ── LEFT COLUMN: Image & Status ── */}
             <div className="bg-white rounded-3xl overflow-hidden border-2 border-[#E0D8CE] shadow-lg">
@@ -329,9 +330,9 @@ export const MarketplaceScreen: React.FC = () => {
             </div>
 
             {/* ── RIGHT COLUMN: Details & Actions ── */}
-            <div className="mt-5 md:mt-0 space-y-5">
+            <div className={`space-y-5 ${isDesktop ? 'mt-5 md:mt-0' : ''}`}>
               
-              <div className="bg-white rounded-3xl border border-[#E0D8CE] shadow-sm p-5 space-y-4">
+              <div className="bg-white rounded-3xl p-5 border-2 border-[#E0D8CE] shadow-sm space-y-4 relative">
               <div className="flex items-start justify-between gap-2">
                 <div className="flex-1 min-w-0">
                   <span className="text-[11px] font-bold text-[#C04B27] uppercase tracking-wider block truncate">
@@ -916,7 +917,7 @@ export const MarketplaceScreen: React.FC = () => {
         onLanguageToggle={() => setLanguage(nextLangMap[selectedLanguage])}
       />
 
-      <main className="flex-1 max-w-md w-full mx-auto p-4 md:p-6 space-y-5">
+      <main className={`flex-1 w-full mx-auto p-4 md:p-6 space-y-5 ${isDesktop ? 'max-w-7xl' : 'max-w-md'}`}>
         {/* Title & Trust Header */}
         <div className="space-y-1">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#1B4D3E]/10 text-[#1B4D3E] text-[11px] font-black uppercase tracking-wider">
@@ -1062,7 +1063,7 @@ export const MarketplaceScreen: React.FC = () => {
           </div>
         ) : (
           /* Products List */
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5">
+          <div className={`grid gap-4 md:gap-5 ${isDesktop ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' : 'grid-cols-1'}`}>
             {products.map((item) => {
               const isOutOfStock = item.stock <= 0;
 

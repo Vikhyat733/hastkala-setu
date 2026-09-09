@@ -27,8 +27,9 @@ import { orderService, Order, OrderStatus } from '../../services/orders/orderSer
 import { formatCurrency } from '../../utils/currency';
 
 export const MyOrdersScreen: React.FC = () => {
-  const { selectedLanguage, setLanguage, currentUser, navigate, t, goBack } = useMela();
+  const { selectedLanguage, setLanguage, currentUser, navigate, t, goBack, viewMode } = useMela();
   const lang = selectedLanguage;
+  const isDesktop = viewMode === 'desktop';
   const nextLangMap = { hi: 'en', en: 'mr', mr: 'bn', bn: 'hi' } as const;
 
   const [activeTab, setActiveTab] = useState<'artisan' | 'buyer'>('artisan');
@@ -253,7 +254,7 @@ export const MyOrdersScreen: React.FC = () => {
         onLanguageToggle={() => setLanguage(nextLangMap[selectedLanguage])}
       />
 
-      <main className="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 space-y-5 pb-20 md:pb-6">
+      <main className={`flex-1 w-full mx-auto p-4 md:p-6 space-y-5 pb-20 md:pb-6 ${isDesktop ? 'max-w-7xl' : 'max-w-md'}`}>
         {/* Notice alert */}
         {actionMessage && (
           <div className="p-3 bg-emerald-50 border border-emerald-300 text-emerald-900 rounded-2xl text-xs font-bold flex items-center gap-2 animate-in fade-in">

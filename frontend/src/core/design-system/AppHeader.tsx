@@ -1,5 +1,6 @@
 import React from 'react';
-import { ArrowLeft, Globe } from 'lucide-react';
+import { ArrowLeft, Globe, Monitor, Smartphone } from 'lucide-react';
+import { useMela } from '../../context/MelaContext';
 import { IconButton } from './IconButton';
 
 export interface AppHeaderProps {
@@ -25,6 +26,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
 }) => {
   // Automatically show back button whenever onBack handler is provided
   const shouldShowBack = showBack !== undefined ? showBack : Boolean(onBack);
+  const { viewMode, setViewMode } = useMela();
 
   return (
     <header className="sticky top-0 z-30 bg-[#FAF6F0]/95 backdrop-blur-md border-b border-[#E8E2D9] px-3.5 sm:px-4 py-2.5 sm:py-3 flex items-center justify-between">
@@ -54,6 +56,27 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
       </div>
 
       <div className="flex items-center gap-2 flex-shrink-0 ml-2">
+        <div className="hidden sm:flex items-center p-1 bg-[#E8E2D9] rounded-xl border border-[#D5C9B5] mr-1">
+          <button
+            onClick={() => setViewMode('desktop')}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+              viewMode === 'desktop' ? 'bg-white text-[#1B4D3E] shadow-[0_2px_4px_rgba(0,0,0,0.05)]' : 'text-[#6B5E59] hover:bg-white/50'
+            }`}
+          >
+            <Monitor className="w-3.5 h-3.5" />
+            Desktop
+          </button>
+          <button
+            onClick={() => setViewMode('android')}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+              viewMode === 'android' ? 'bg-white text-[#1B4D3E] shadow-[0_2px_4px_rgba(0,0,0,0.05)]' : 'text-[#6B5E59] hover:bg-white/50'
+            }`}
+          >
+            <Smartphone className="w-3.5 h-3.5" />
+            Android
+          </button>
+        </div>
+
         {showLanguageToggle && (
           <button
             type="button"

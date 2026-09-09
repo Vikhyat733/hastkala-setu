@@ -19,6 +19,7 @@ export type MelaRoute =
   | '/profile';
 
 
+export type ViewMode = 'desktop' | 'android';
 
 interface MelaContextType {
   currentRoute: MelaRoute;
@@ -27,6 +28,8 @@ interface MelaContextType {
   selectedLanguage: Language;
   setLanguage: (lang: Language) => void;
   t: Translations;
+  viewMode: ViewMode;
+  setViewMode: (mode: ViewMode) => void;
   onboardingCompleted: boolean;
   completeOnboarding: () => void;
   currentUser: UserProfile | null;
@@ -41,6 +44,7 @@ interface MelaContextType {
 
 const STORAGE_KEY_LANG = 'mela_selected_language';
 const STORAGE_KEY_ONBOARDING = 'mela_onboarding_done';
+const STORAGE_KEY_VIEW_MODE = 'mela_view_mode';
 
 const MelaContext = createContext<MelaContextType | undefined>(undefined);
 
@@ -56,6 +60,14 @@ export const MelaProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (saved === 'en' || saved === 'hi' || saved === 'mr' || saved === 'bn') return saved;
     } catch {}
     return 'hi';
+  });
+
+  const [viewMode, setViewModeState] = useState<ViewMode>(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY_VIEW_MODE);
+      if (saved === 'android') return 'android';
+    } catch {}
+    return 'desktop';
   });
 
   // Onboarding completed flag
@@ -78,6 +90,13 @@ export const MelaProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setSelectedLanguageState(lang);
     try {
       localStorage.setItem(STORAGE_KEY_LANG, lang);
+    } catch {}
+  };
+
+  const setViewMode = (mode: ViewMode) => {
+    setViewModeState(mode);
+    try {
+      localStorage.setItem(STORAGE_KEY_VIEW_MODE, mode);
     } catch {}
   };
 
@@ -132,6 +151,8 @@ export const MelaProvider: React.FC<{ children: React.ReactNode }> = ({ children
         selectedLanguage,
         setLanguage,
         t,
+        viewMode,
+        setViewMode,
         onboardingCompleted,
         completeOnboarding,
         currentUser,

@@ -15,8 +15,9 @@ export const AiImageStudioScreen: React.FC = () => {
     enhancementIsDevFallback,
   } = useProductCreation();
 
-  const { t, selectedLanguage } = useMela();
+  const { t, selectedLanguage, viewMode } = useMela();
   const lang = selectedLanguage as 'hi' | 'en';
+  const isDesktop = viewMode === 'desktop';
 
   const handleAccept = () => {
     setStep('voice');
@@ -38,9 +39,9 @@ export const AiImageStudioScreen: React.FC = () => {
         showLanguageToggle={false}
       />
 
-      <main className="flex-1 max-w-5xl w-full mx-auto p-4 md:p-6 space-y-6 pb-20 md:pb-6">
+      <main className={`flex-1 w-full mx-auto p-4 md:p-6 space-y-6 pb-20 md:pb-6 ${isDesktop ? 'max-w-5xl' : 'max-w-md'}`}>
         
-        <div className="md:grid md:grid-cols-2 md:gap-8 md:items-center">
+        <div className={isDesktop ? "md:grid md:grid-cols-2 md:gap-8 md:items-center" : "space-y-6"}>
           {/* LEFT COLUMN: Before / After Comparison */}
           <div className="w-full">
             <BeforeAfterCompare
@@ -55,7 +56,7 @@ export const AiImageStudioScreen: React.FC = () => {
           </div>
 
           {/* RIGHT COLUMN: Title & Actions */}
-          <div className="mt-8 md:mt-0 space-y-6 flex flex-col justify-center">
+          <div className={`flex flex-col justify-center space-y-6 ${isDesktop ? 'mt-8 md:mt-0' : 'mt-8'}`}>
             {/* Title Header */}
             <div className="text-center md:text-left space-y-1.5">
               {wasActuallyEnhanced ? (

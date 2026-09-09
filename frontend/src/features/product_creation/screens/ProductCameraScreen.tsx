@@ -23,8 +23,9 @@ const SAMPLE_CRAFT_IMAGES = [
 
 export const ProductCameraScreen: React.FC = () => {
   const { setImageAndEnhance, isEnhancing, errorMessage, setErrorMessage, clearError } = useProductCreation();
-  const { t, selectedLanguage, navigate } = useMela();
+  const { t, selectedLanguage, navigate, viewMode } = useMela();
   const lang = selectedLanguage;
+  const isDesktop = viewMode === 'desktop';
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -143,7 +144,7 @@ export const ProductCameraScreen: React.FC = () => {
         showLanguageToggle={false}
       />
 
-      <main className="flex-1 max-w-5xl w-full mx-auto p-4 md:p-6 flex flex-col justify-between space-y-4">
+      <main className={`flex-1 w-full mx-auto p-4 md:p-6 flex flex-col justify-between space-y-4 pb-20 ${isDesktop ? 'max-w-5xl' : 'max-w-md'}`}>
         <div className="text-center md:text-left space-y-1">
           <h2 className="text-2xl md:text-3xl font-black text-[#1B4D3E] tracking-tight">
             {t.sellProduct.camera.title}
@@ -160,7 +161,7 @@ export const ProductCameraScreen: React.FC = () => {
           </div>
         )}
 
-        <div className="md:grid md:grid-cols-2 md:gap-8 items-center flex-1">
+        <div className={`flex-1 ${isDesktop ? 'md:grid md:grid-cols-2 md:gap-8 items-center' : 'space-y-6'}`}>
           <div className="w-full">
             <div className="relative w-full aspect-square rounded-3xl overflow-hidden bg-black border-4 border-[#E0D8CE] shadow-2xl flex items-center justify-center">
               {cameraActive ? (
@@ -187,7 +188,7 @@ export const ProductCameraScreen: React.FC = () => {
           <div className="mt-6 md:mt-0 space-y-6">
             <div className="space-y-4">
               <PrimaryButton
-                onClick={handleCapture}
+                onClick={handleShutterClick}
                 disabled={!cameraActive || isEnhancing}
                 className={`py-4 shadow-xl ${
                   !cameraActive || isEnhancing ? 'opacity-50' : 'hover:scale-102 active:scale-95'

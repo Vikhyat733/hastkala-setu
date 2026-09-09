@@ -93,10 +93,10 @@ export const ProfileScreen: React.FC = () => {
                     </div>
                     <div>
                       <span className="text-xs font-black text-[#261D1A] block">
-                        {t.profile.earnings}
+                        {t.profile.myEarningsLink}
                       </span>
                       <span className="text-[10px] text-[#6B5E59]">
-                        {t.earnings.totalSales}
+                        {t.profile.earningsDesc}
                       </span>
                     </div>
                   </div>

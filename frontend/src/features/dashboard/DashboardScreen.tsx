@@ -59,7 +59,8 @@ const MELA_TIPS: { hi: string; en: string; mr: string; bn: string }[] = [
 ];
 
 export const DashboardScreen: React.FC = () => {
-  const { t, currentUser, selectedLanguage, setLanguage, logout, backendHealth, navigate } = useMela();
+  const { selectedLanguage, setLanguage, currentUser, logout, navigate, t, viewMode, backendHealth } = useMela();
+  const isDesktop = viewMode === 'desktop';
 
   const [products, setProducts] = useState<ProductItem[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
@@ -138,7 +139,7 @@ export const DashboardScreen: React.FC = () => {
         hi: 'MELA में आप "अपना सामान बेचें" पर जाकर फोटो लें। MELA AI आपकी सामग्री व कारीगरी की लागत जोड़कर पारदर्शी और उचित विक्रय मूल्य सुझाएगा।',
         en: "In MELA, start with 'Sell Your Product' and take a photo. MELA AI will calculate material and labor expenses to recommend a fair selling price.",
         mr: 'MELA मध्ये "सामान विका" वर जाऊन फोटो काढा. MELA AI साहित्य व कारागिरीचा खर्च जोडून योग्य किंमत सुचवेल.',
-        bn: 'MELA-তে "পণ্য বিক্রি করুন" এ গিয়ে ছবি তুলুন। MELA AI কাঁচামাল ও শ্রমের খরচ হিসাব করে ন্যায্য মূল্য প্রস্তাব করবে।',
+        bn: 'MELA-তে "পণ্য বিক্রি করুন" এ গিয়ে ছবি তুলুন। MELA AI কাঁচামাল ও শ্রমের খরচ হিসাব করে ন্যায্য মূল্য প্রস্তাব করবে.',
       };
       setAssistantResponse(resp);
       const queryMap = {
@@ -247,10 +248,10 @@ export const DashboardScreen: React.FC = () => {
         }
       />
 
-      <main className="flex-1 w-full max-w-7xl mx-auto p-4 md:p-6 md:grid md:grid-cols-12 md:gap-6 space-y-5 md:space-y-0 pb-20 md:pb-6">
+      <main className={`flex-1 w-full mx-auto p-4 md:p-6 pb-20 md:pb-6 ${isDesktop ? 'max-w-7xl md:grid md:grid-cols-12 md:gap-6 space-y-5 md:space-y-0' : 'max-w-md space-y-5'}`}>
         
         {/* LEFT MAIN COLUMN (Desktop) */}
-        <div className="md:col-span-8 space-y-5">
+        <div className={isDesktop ? "md:col-span-8 space-y-5" : "space-y-5"}>
         {/* ─── 1. GREETING & STATUS CARD ─── */}
         <div className="bg-white p-4 md:p-5 rounded-3xl border border-[#E0D8CE] shadow-2xs">
           <div className="flex items-center justify-between">
@@ -398,7 +399,7 @@ export const DashboardScreen: React.FC = () => {
             </span>
           </div>
 
-          <div className="grid grid-cols-3 gap-2.5">
+          <div className={`grid gap-2.5 ${isDesktop ? 'grid-cols-3' : 'grid-cols-3'}`}>
             {/* Metric 1: Products Listed */}
             <button
               type="button"
@@ -462,7 +463,7 @@ export const DashboardScreen: React.FC = () => {
         </div> {/* End Left Column */}
 
         {/* RIGHT SIDEBAR COLUMN (Desktop) */}
-        <div className="md:col-span-4 space-y-5">
+        <div className={isDesktop ? "md:col-span-4 space-y-5" : "space-y-5"}>
           {/* ─── 5. NEEDS YOUR ATTENTION ("आपका ध्यान चाहिए") ─── */}
           <section aria-labelledby="needs-attention-heading" className="space-y-2">
             <div className="flex items-center justify-between px-1">

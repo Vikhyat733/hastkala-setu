@@ -33,8 +33,9 @@ import {
 import { formatCurrency } from '../../utils/currency';
 
 export const EarningsScreen: React.FC = () => {
-  const { selectedLanguage, setLanguage, currentUser, navigate, t, goBack } = useMela();
+  const { selectedLanguage, setLanguage, currentUser, navigate, t, viewMode } = useMela();
   const nextLangMap = { hi: 'en', en: 'mr', mr: 'bn', bn: 'hi' } as const;
+  const isDesktop = viewMode === 'desktop';
 
   const [period, setPeriod] = useState<TimePeriod>('this_month');
   const [summary, setSummary] = useState<EarningsSummary | null>(null);
@@ -131,11 +132,11 @@ export const EarningsScreen: React.FC = () => {
         onLanguageToggle={() => setLanguage(nextLangMap[selectedLanguage])}
       />
 
-      <main className="flex-1 max-w-5xl w-full mx-auto p-4 md:p-8 space-y-5 pb-20 md:pb-6">
-        <div className="md:grid md:grid-cols-12 md:gap-6 space-y-5 md:space-y-0">
+      <main className={`flex-1 w-full mx-auto p-4 md:p-8 space-y-5 pb-20 md:pb-6 ${isDesktop ? 'max-w-5xl' : 'max-w-md'}`}>
+        <div className={isDesktop ? "md:grid md:grid-cols-12 md:gap-6 space-y-5 md:space-y-0" : "space-y-5"}>
           
           {/* Left Column */}
-          <div className="md:col-span-7 space-y-5">
+          <div className={isDesktop ? "md:col-span-7 space-y-5" : "space-y-5"}>
         {/* ─── 1. TIME PERIOD TABS ─── */}
         <div className="bg-[#EDE5DA] p-1 rounded-2xl flex gap-1 border border-[#E0D8CE]">
           {[
@@ -311,8 +312,8 @@ export const EarningsScreen: React.FC = () => {
 
         </div>
 
-          {/* Right Column: Recent Sales */}
-          <div className="md:col-span-5 space-y-5">
+          {/* Right Column (Insights & Actions) */}
+          <div className={isDesktop ? "md:col-span-5 space-y-5" : "space-y-5"}>
             {/* ─── 5. RECENT COMPLETED SALES ─── */}
         <div className="space-y-3">
           <div className="flex items-center justify-between px-1">
