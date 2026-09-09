@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  # ==========================================
+  # PostgreSQL Database Service
+  # ==========================================
+  database:
+    image: postgres:15-alpine
+    container_name: mela_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: mela_db
+      POSTGRES_USER: mela_user
+      POSTGRES_PASSWORD: mela_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/schema:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mela_user -d mela_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ==========================================
+  # FastAPI Backend API Service
+  # ==========================================
+  backend:
+    build:
+      context: ./backend/mela_api
+      dockerfile: ../../deployment/docker/Dockerfile.backend
+    container_name: mela_backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=development
+      - DATABASE_URL=postgresql://mela_user:mela_password@database:5432/mela_db
+      - SECRET_KEY=dev_secret_key_change_in_production_mela_sih_2026
+    depends_on:
+      database:
+        condition: service_healthy
+    volumes:
+      - ./backend/mela_api/app:/app/app
+
+volumes:
+  postgres_data:

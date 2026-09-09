@@ -1,36 +1,83 @@
-# Dependencies
-node_modules
-.pnp
-.pnp.js
-
-# Build outputs
-dist
-build
-.next
-out
-
-# Environment variables
+# Environment files
 .env
 .env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env.*.local
+*.env
+
+# Python & Backend
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+.hypothesis/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Flutter & Dart
+.dart_tool/
+.packages
+.pub-cache/
+.pub/
+frontend/mela_app/build/
+frontend/mela_app/.flutter-plugins
+frontend/mela_app/.flutter-plugins-dependencies
+frontend/mela_app/.packages
+frontend/mela_app/.pub-cache/
+frontend/mela_app/.pub/
+
+# IDEs and Editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Database
+*.sqlite
+*.sqlite3
+*.db
+
+# AI models & Large Datasets (Weights and large binaries should be downloaded or pulled from cloud storage)
+ai/image_models/*.onnx
+ai/image_models/*.pt
+ai/image_models/*.pth
+ai/image_models/*.bin
+ai/pricing_model/*.pkl
+ai/pricing_model/*.joblib
+ai/datasets/*.csv
+ai/datasets/*.zip
+ai/datasets/*.tar.gz
+!ai/**/.gitkeep
 
 # Logs
+logs/
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-.DS_Store
-Thumbs.db

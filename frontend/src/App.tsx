@@ -1,105 +1,62 @@
-import React, { useState } from 'react';
-import { MarketplaceProvider, useMarketplace } from './context/MarketplaceContext';
-import { Navbar } from './components/Navbar';
-import { HeroBanner } from './components/HeroBanner';
-import { CategoryFilter } from './components/CategoryFilter';
-import { ProductGrid } from './components/ProductGrid';
-import { ProductModal } from './components/ProductModal';
-import { AIVisionStudio } from './components/AIVisionStudio';
-import { CartDrawer } from './components/CartDrawer';
-import { CheckoutModal } from './components/CheckoutModal';
-import { ArtisanDashboard } from './components/ArtisanDashboard';
-import { ArtisanStories } from './components/ArtisanStories';
-import { MyOrdersView } from './components/MyOrdersView';
-import { Footer } from './components/Footer';
-import { Toast } from './components/Toast';
-import { RuralArtisanApp } from './components/rural-app/RuralArtisanApp';
+import React from 'react';
+import { MelaProvider, useMela } from './context/MelaContext';
+import { SplashScreen } from './features/splash/SplashScreen';
+import { LanguageScreen } from './features/language/LanguageScreen';
+import { OnboardingScreen } from './features/onboarding/OnboardingScreen';
+import { LoginScreen } from './features/authentication/LoginScreen';
+import { OtpScreen } from './features/authentication/OtpScreen';
+import { DashboardScreen } from './features/dashboard/DashboardScreen';
 
+import { ProductCreationFlow } from './features/product_creation/ProductCreationFlow';
+import { MyProductsScreen } from './features/product_creation/screens/MyProductsScreen';
+import { MyOrdersScreen } from './features/orders/MyOrdersScreen';
+import { MarketplaceScreen } from './features/marketplace/MarketplaceScreen';
+import { EarningsScreen } from './features/earnings/EarningsScreen';
+import { ProfileScreen } from './features/profile/ProfileScreen';
+import { AppLayout } from './core/design-system/AppLayout';
 
-const MarketplaceContent: React.FC = () => {
-  const { currentView, setCurrentView, products, cart, setIsCartOpen } = useMarketplace();
+const MelaRouter: React.FC = () => {
+  const { currentRoute } = useMela();
 
-  // Filter States
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [selectedState, setSelectedState] = useState('All Regions');
-  const [giOnly, setGiOnly] = useState(false);
-  const [ecoOnly, setEcoOnly] = useState(false);
-  const [sortBy, setSortBy] = useState<'featured' | 'price-asc' | 'price-desc' | 'rating'>('featured');
-  const [searchQuery, setSearchQuery] = useState('');
-
-  const totalCartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
-
-  return (
-    <div className="min-h-screen flex flex-col justify-between craft-pattern-bg">
-      
-      {/* If currentView is rural-artisan-app, render directly with zero distractions */}
-      {currentView === 'rural-artisan-app' ? (
-        <main className="flex-1">
-          <RuralArtisanApp />
-        </main>
-      ) : (
-        <>
-          {/* Top Sticky Navbar for Web Marketplace mode */}
-          <Navbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-
-          {/* Main View Router */}
-          <main className="flex-1 pb-16 md:pb-0">
-            {currentView === 'marketplace' && (
-              <div className="animate-in fade-in duration-300">
-                <HeroBanner />
-                <CategoryFilter
-                  selectedCategory={selectedCategory}
-                  setSelectedCategory={setSelectedCategory}
-                  selectedState={selectedState}
-                  setSelectedState={setSelectedState}
-                  giOnly={giOnly}
-                  setGiOnly={setGiOnly}
-                  ecoOnly={ecoOnly}
-                  setEcoOnly={setEcoOnly}
-                  sortBy={sortBy}
-                  setSortBy={setSortBy}
-                  totalCount={products.length}
-                />
-                <ProductGrid
-                  products={products}
-                  selectedCategory={selectedCategory}
-                  selectedState={selectedState}
-                  giOnly={giOnly}
-                  ecoOnly={ecoOnly}
-                  sortBy={sortBy}
-                  searchQuery={searchQuery}
-                />
-              </div>
-            )}
-
-            {currentView === 'ai-studio' && <AIVisionStudio />}
-            {currentView === 'artisan-dashboard' && <ArtisanDashboard />}
-            {currentView === 'b2b-linkage' && <ArtisanDashboard />}
-            {currentView === 'artisan-stories' && <ArtisanStories />}
-            {currentView === 'my-orders' && <MyOrdersView />}
-          </main>
-
-          {/* Footer */}
-          <Footer />
-        </>
-      )}
-
-      {/* Global Modals & Drawers */}
-      <ProductModal />
-      <CartDrawer />
-      <CheckoutModal />
-      <Toast />
-
-    </div>
-  );
+  switch (currentRoute) {
+    case '/splash':
+      return <SplashScreen />;
+    case '/language':
+      return <LanguageScreen />;
+    case '/onboarding':
+      return <OnboardingScreen />;
+    case '/login':
+      return <LoginScreen />;
+    case '/otp':
+      return <OtpScreen />;
+    case '/dashboard':
+      return <DashboardScreen />;
+    case '/sell':
+      return <ProductCreationFlow />;
+    case '/my-products':
+      return <MyProductsScreen />;
+    case '/orders':
+      return <MyOrdersScreen />;
+    case '/marketplace':
+      return <MarketplaceScreen />;
+    case '/earnings':
+      return <EarningsScreen />;
+    case '/profile':
+      return <ProfileScreen />;
+    default:
+      return <SplashScreen />;
+  }
 };
 
-export function App() {
+
+export const App: React.FC = () => {
   return (
-    <MarketplaceProvider>
-      <MarketplaceContent />
-    </MarketplaceProvider>
+    <MelaProvider>
+      <AppLayout>
+        <MelaRouter />
+      </AppLayout>
+    </MelaProvider>
   );
-}
+};
 
 export default App;
