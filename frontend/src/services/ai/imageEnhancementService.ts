@@ -57,20 +57,54 @@ export class ImageEnhancementService {
       console.warn('[ImageEnhancementService] Backend unavailable, using client-side fallback:', err);
     }
 
-    // Client-side fallback: apply CSS filter effects by returning original
-    // with honest operations list describing what was attempted
-    return {
-      success: true,
-      originalImage: imageDataUrl,
-      enhancedImage: imageDataUrl, // No processing done — return original honestly
-      operationsApplied: [
-        'Server enhancement unavailable',
-        'Original image preserved without modification',
-        '(Reconnect to MELA backend for real enhancement)',
-      ],
-      isDevFallback: true,
-      statusMessage: 'Enhancement server unavailable — original image used',
-    };
+    // Client-side fallback: actually apply enhancement using canvas
+    try {
+      const enhancedDataUrl = await this.applyCanvasEnhancement(imageDataUrl);
+      return {
+        success: true,
+        originalImage: imageDataUrl,
+        enhancedImage: enhancedDataUrl,
+        operationsApplied: [
+          'Client-side enhancement applied',
+          'Brightness & contrast adjusted',
+          '(Local processing fallback)'
+        ],
+        isDevFallback: true,
+        statusMessage: 'Photo corrected using local enhancement filters',
+      };
+    } catch (e) {
+      return {
+        success: true,
+        originalImage: imageDataUrl,
+        enhancedImage: imageDataUrl,
+        operationsApplied: [
+          'Enhancement unavailable',
+          'Original image preserved'
+        ],
+        isDevFallback: true,
+        statusMessage: 'Enhancement unavailable — original image used',
+      };
+    }
+  }
+
+  private applyCanvasEnhancement(imageDataUrl: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return reject('No context');
+        
+        ctx.filter = 'contrast(1.1) brightness(1.05) saturate(1.1)';
+        ctx.drawImage(img, 0, 0);
+        resolve(canvas.toDataURL('image/jpeg', 0.9));
+      };
+      img.onerror = reject;
+      img.src = imageDataUrl;
+    });
   }
 }
 

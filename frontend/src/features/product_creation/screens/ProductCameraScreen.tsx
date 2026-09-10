@@ -128,7 +128,19 @@ export const ProductCameraScreen: React.FC = () => {
 
   const handleSelectSample = async (sampleUrl: string) => {
     stopCamera();
-    await setImageAndEnhance(sampleUrl);
+    try {
+      const response = await fetch(sampleUrl);
+      const blob = await response.blob();
+      const reader = new FileReader();
+      reader.onloadend = async () => {
+        const base64data = reader.result as string;
+        await setImageAndEnhance(base64data);
+      };
+      reader.readAsDataURL(blob);
+    } catch (err) {
+      console.warn('Failed to convert sample to base64, falling back to URL:', err);
+      await setImageAndEnhance(sampleUrl);
+    }
   };
 
   return (
